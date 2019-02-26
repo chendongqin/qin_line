@@ -22,8 +22,7 @@ class Teacherbase extends Base {
         //$this->isFilter()判断该访问方法是否为过滤访问方法
         if($this->isFilter()===false){
             if(empty($owner)){
-                return $this->returnJson('未登录',9000,false,array('url'=>'/teacher/login'));
-                die();
+                return $this->redirect('/?s=/techer/login');
             }
         }
         $this->assign('teacher',$owner);
