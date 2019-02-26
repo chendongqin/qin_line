@@ -19,11 +19,8 @@ class Userbase extends Base {
         $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
         //$this->isFilter()判断该访问方法是否为过滤访问方法
-        if($this->isFilter()===false){
-            if(empty($user)){
-                return $this->returnJson('未登录',9000,false,array('url'=>'/user/login'));
-                die();
-            }
+        if($this->isFilter()===false and empty($user)){
+            return $this->redirect('/?s=/user/login');
         }
         $this->assign('user',$user);
         Session::delete('user');

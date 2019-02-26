@@ -16,8 +16,14 @@ class Captcha extends Base{
     public function index(){
         $request = $this->request;
         $channel = $request->param('channel','','string');
-        Tool::captcha(4,100,40,$channel);
+        Tool::captcha(4,90,32,$channel);
     }
     
+    public function show(){
+        $channel = $this->getParam('channel','','string');
+        $this->assign('channel',$channel);
+        return $this->fetch();
+    }
+
 
 }
