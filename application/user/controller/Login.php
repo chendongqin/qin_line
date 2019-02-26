@@ -1,6 +1,6 @@
 <?php
 namespace app\user\controller;
-use app\index\model\User;
+use app\user\model\User;
 use base\Base;
 use think\Cache;
 use think\Session;
