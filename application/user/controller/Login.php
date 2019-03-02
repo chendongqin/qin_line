@@ -2,6 +2,8 @@
 namespace app\user\controller;
 use app\user\model\User;
 use base\Base;
+use ku\Tool;
+use ku\Verify;
 use think\Cache;
 use think\Session;
 
@@ -25,7 +27,11 @@ class login extends Base{
             return $this->returnJson('验证码不正确',1000);
         }
         $model = new User();
-        $owner = $model->where(array('user_no'=>$username))->find();
+        if(Verify::isMobile($username)){
+            $owner = $model->where(array('mobile'=>$username))->find();
+        }else{
+            $owner = $model->where(array('user_no'=>$username))->find();
+        }
         if(empty($owner)){
             return $this->returnJson('用户名不存在',1000);
         }

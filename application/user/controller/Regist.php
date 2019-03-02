@@ -1,8 +1,9 @@
 <?php
 namespace app\user\controller;
-use app\index\model\Users;
+use app\user\model\User;
 use base\Base;
 use think\Cache;
+use think\Db;
 use think\Session;
 
 class Regist extends Base{
@@ -21,10 +22,10 @@ class Regist extends Base{
      * @throws \think\exception\DbException
      */
     public function i(){
-        $owner = Session::get('teacher');
+        $owner = Session::get('user');
         $owner = isset($owner[0])?$owner[0]:$owner;
         if(!empty($owner)){
-            return $this->redirect('/teacher');
+            return $this->redirect('/user');
         }
         $mobile = $this->getParam('mobile','');
         $password = $this->getParam('password','');
@@ -34,7 +35,7 @@ class Regist extends Base{
         if($virefyCode != $code){
             return $this->returnJson('手机验证码不正确',1000);
         }
-        $model = new Users();
+        $model = new User();
         $owner = $model->where(array('mobile'=>$mobile))->find();
         if(!empty($owner)){
             return $this->returnJson('该手机已注册',1002);
@@ -46,12 +47,15 @@ class Regist extends Base{
             return $this->returnJson('密码长度在6到30位之间',1000);
         }
         $pwd = $this->createPwd($password);
+        $today = date('Ymd');
+        $count = Db::name('user')->where('create_at >= '.$today.'000000 and create_at <= '.$today.'235959')->count('id');
+        $sn = sprintf("%04d", $count+1);
         $model->data(
             array(
                 'mobile'=>$mobile,
                 'password'=>$pwd,
-                'createTime'=>date('Y-m-d H:i:s'),
-                'loginTime'=>date('Y-m-d H:i:s'),
+                'create_at'=>date('YmdHis'),
+                'user_no'=>date('YmdH').$sn.mt_rand(10,99),
                 )
         );
         $model->save();
