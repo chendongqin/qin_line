@@ -60,7 +60,7 @@ class Regist extends Base{
         );
         $model->save();
         $owner = $model->where(array('mobile'=>$mobile))->find();
-        Session::push('teacher',$owner);
+        Session::push('user',$owner);
         return $this->returnJson('注册成功',1001,true);
     }
 
