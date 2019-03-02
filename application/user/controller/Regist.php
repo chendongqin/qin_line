@@ -14,9 +14,10 @@ class Regist extends Base{
     public function index(){
         return $this->fetch();
     }
-
-    /**用户注册接口
-     * @return \think\response\Json|void
+    
+    /**
+     * 用户注册接口
+     * @return \think\response\Json
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
@@ -25,7 +26,7 @@ class Regist extends Base{
         $owner = Session::get('user');
         $owner = isset($owner[0])?$owner[0]:$owner;
         if(!empty($owner)){
-            return $this->redirect('/user');
+            return $this->returnJson('您已是登陆状态');
         }
         $mobile = $this->getParam('mobile','');
         $password = $this->getParam('password','');
