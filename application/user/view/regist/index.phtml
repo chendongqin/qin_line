@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/assets/css/custom.css"  id="style-resource-7">
     <script src="/assets/js/jquery-1.11.0.min.js"></script>
     <script src="/lib/cookie.js" id="script-resource-13"></script>
+    <script src="/lib/alert.js" id="script-resource-13"></script>
   </head>
 
   <body class="page-body login-page login-form-fall">
@@ -27,7 +28,7 @@
           <p class="description">琴行管理就要简单快乐</p>
           <div class="login-progressbar-indicator">
             <h3>43%</h3>
-            <span>登录中...</span>
+            <span>注册中...</span>
           </div>
         </div>
       </div>
@@ -36,17 +37,13 @@
       </div>
       <div class="login-form">
         <div class="login-content">
-          <div class="form-login-error">
-            <h3>无法登陆</h3>
-            <p>请输入正确的手机号及密码</p>
-          </div>
-          <form method="post" role="form" id="form_login" data-type="teacher">
+          <form role="form" id="form_regist">
             <div class="form-group">
               <div class="input-group">
                 <div class="input-group-addon">
                   <i class="entypo-user"></i>
                 </div>
-                <input type="text" class="form-control" name="username" tabindex="1" id="username" placeholder="手机号" autocomplete="off" />
+                <input type="text" class="form-control" name="mobile" id="mobile" placeholder="手机号">
               </div>
             </div>
             <div class="form-group">
@@ -54,37 +51,86 @@
                 <div class="input-group-addon">
                   <i class="entypo-key"></i>
                 </div>
-                <input type="password" class="form-control" name="password" tabindex="2" id="password" placeholder="密码" autocomplete="off" />
-              </div>
-            </div>
-            <div class="form-group" id="captchaModal">
-              <div class="input-group" id="captcha-error">
-                <div class="input-group-addon">
-                  <i class="entypo-doc-landscape"></i>
-                </div>
-                <input class="form-control login-input" autocomplete="off" type="text" name="captcha" tabindex="3" placeholder="验证码" maxlength="4" id="captcha">
-                <a href="javascript:;" class="captcha pull-right"><img src="/index/captcha/?channel=userLogin" alt="图片验证码" title="更换验证码" width="100" height="40"></a>
-              </div>
-            </div>
-            <div class="form-group" style="display: none;" id="phoneModal">
-              <div class="input-group">
-                <div class="input-group-addon">
-                  <i class="entypo-doc-landscape"></i>
-                </div>
+                <input type="password" class="form-control" name="password" id="password" placeholder="密码">
               </div>
             </div>
             <div class="form-group">
-              <input type="hidden" name="isremember" value="1">
-              <button type="submit" tabindex="4" class="btn btn-primary btn-block btn-login text-align-center">
-                登录
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="entypo-key"></i>
+                </div>
+                <input type="sure" class="form-control" name="sure" id="sure" placeholder="确认密码">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-addon">
+                    <i class="entypo-doc-landscape"></i>
+                </div>
+                <input type="text" class="form-control login-input" name="code" id="code" placeholder="短信验证码" autocomplete="off" />
+                <a href="javascript:;" class="pull-right btn-white" id="getPhone" style="width: 120px;height: 40px;line-height: 40px;text-align: center;color: #000;">获取手机验证码</a>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary btn-block btn-login text-align-center">
+                注册
                 <i class="entypo-login"></i>
               </button>
             </div>                                  
           </form>
-          <div style="text-align: right;color: #999;"><a href="/user/regist">前往注册</a></div>
+          <div style="text-align: right;color: #999;"><a href="/user/rigister">前往登录</a></div>
         </div>
       </div>
     </div>
+    <div style="position: fixed;top: 0;left: 0;width: 100%;height: 100px;z-index: 10000;" id="alertSuccessWrapper" class="none">
+      <div class="alert" style="width:350px;margin: 0 auto;text-align: center;">
+        <span id="alertSuccessText"></span>
+      </div>
+    </div>
+    <script type="text/javascript">
+      showBtn = getCookie('phone') === '' ? true : false;
+      (function(){
+        // 获取手机验证码
+        $('#getPhone').click(function() {
+          if (showBtn) {
+            setCookie('phone', 60, 60 * 1000)
+            showBtn = false
+            countTime('phone', 'getPhone')
+          }
+        });
+        // 注册
+        $('#form_regist').submit(function(e) {
+          e.preventDefault();
+          const params = $('#form_regist').serializeArray()
+          $.post('/user/regist/i', params, function(res) {
+            if (res.status == false) {
+              pianoAlert(false, res.msg, 1500, false);
+            } else {
+              pianoAlert(true, res.msg, 1500);
+              window.location.href = '/user';
+            }
+          })
+        });
+      })();
+      // 验证码获取倒计时
+      function countTime (name, idName) {
+        if (getCookie(name) === '') {
+          $('#' + idName).text('获取手机验证码');
+          showBtn = true;
+          return false;
+        } else {
+          var sec = parseInt(getCookie(name));
+
+          setTimeout(function() {
+              sec--;
+              $('#' + idName).text(sec);
+              setCookie(name, sec, sec * 1000);
+
+              countTime(name, idName);
+          }, 1000)
+        }
+      }
+    </script>
     <script src="/assets/js/gsap/main-gsap.js" id="script-resource-1"></script>
     <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js" id="script-resource-2"></script>
     <script src="/assets/js/bootstrap.js" id="script-resource-3"></script>
