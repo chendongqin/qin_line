@@ -19,7 +19,7 @@ class login extends Base{
         if(!empty($owner)){
             return $this->returnJson('已登陆',9999);
         }
-        $username = $this->getParam('userName','');
+        $username = $this->getParam('username','');
         $password = $this->getParam('password','');
         $code = $this->getParam('code','');
         $loginCode = Cache::get('userLogin'.$username);

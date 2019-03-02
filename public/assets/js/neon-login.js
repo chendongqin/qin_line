@@ -102,7 +102,7 @@ var neonLogin = neonLogin || {};
 								if(json['status']){
 									// Redirect to login page
 									setTimeout(function(){
-										var url = '/';
+										var url = '/user';
 										if(json['data']&&json['data']['url']){
 											url = json['data']['url'];
 										}
