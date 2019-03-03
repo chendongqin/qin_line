@@ -13,8 +13,6 @@ use think\Db;
  class Index extends Userbase{
 
     public function index(){
-        $user = Session::get('user');
-        $user = isset($user[0])?$user[0]:$user;
-        echo  'hello:'.$user['user_no'];
+      return $this->fetch();
     }
  }

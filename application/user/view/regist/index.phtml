@@ -78,7 +78,7 @@
               </button>
             </div>                                  
           </form>
-          <div style="text-align: right;color: #999;"><a href="/user/rigister">前往登录</a></div>
+          <div style="text-align: right;color: #999;"><a href="/user/login">前往登录</a></div>
         </div>
       </div>
     </div>
@@ -90,6 +90,7 @@
     <script type="text/javascript">
       showBtn = getCookie('phone') === '' ? true : false;
       (function(){
+        countTime('phone', 'getPhone');
         // 获取手机验证码
         $('#getPhone').click(function() {
           if (showBtn) {
