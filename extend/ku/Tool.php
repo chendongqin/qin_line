@@ -416,7 +416,7 @@ class Tool {
             $code .= $text;
             imagettftext($image,$size,$angle,$x,$y,$randColor,$fontFile,$text);
         }
-        $session = new Cache();
+        $session = new Session();
         $session->set($channel.'_virefy_code',$code);
         header("Content-Type: image/png");
         imagepng($image);
