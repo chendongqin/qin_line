@@ -22,7 +22,7 @@ class Teacherbase extends Base {
         //$this->isFilter()判断该访问方法是否为过滤访问方法
         if($this->isFilter()===false){
             if(empty($owner)){
-                return $this->redirect('/?s=/techer/login');
+                return $this->redirect('/techer/login');
             }
         }
         $this->assign('teacher',$owner);
