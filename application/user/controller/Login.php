@@ -10,6 +10,11 @@ use think\Session;
 class login extends Base{
 
     public function index(){
+        $owner = Session::get('user');
+        $owner = isset($owner[0])?$owner[0]:$owner;
+        if(!empty($owner)){
+           return $this->redirect('/user');
+        }
         return $this->fetch();
     }
 
@@ -23,7 +28,9 @@ class login extends Base{
         $password = $this->getParam('password','');
         $code = $this->getParam('code','');
         $loginCode = Session::get('userLogin_virefy_code');
-        if($loginCode != $code){
+        var_dump($code);
+        var_dump($loginCode);
+        if(strtolower($loginCode) != $code){
             return $this->returnJson('验证码不正确',1000);
         }
         $model = new User();
