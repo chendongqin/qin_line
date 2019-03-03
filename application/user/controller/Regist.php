@@ -33,9 +33,9 @@ class Regist extends Base{
         $sure = $this->getParam('sure','');
         $code = $this->getParam('code','');
         $virefyCode = Cache::get('userReg'.$mobile);
-        // if($virefyCode != $code){
-        //     return $this->returnJson('手机验证码不正确',1000);
-        // }
+        if($virefyCode != $code){
+            return $this->returnJson('手机验证码不正确',1000);
+        }
         $model = new User();
         $owner = $model->where(array('mobile'=>$mobile))->find();
         if(empty($mobile) || empty($password) || empty($sure) || empty($code)){
