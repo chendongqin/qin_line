@@ -14,6 +14,6 @@ class Logout extends Userbase{
     public function index(){
         $session = new Session();
         $session->delete('user');
-        return $this->returnJson('退出成功',1001,true);
+         return $this->redirect('/user/login');
     }
 }
