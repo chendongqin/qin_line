@@ -96,5 +96,48 @@ class Base extends Controller{
         return $returnData;
     }
 
+    public function diffBetweenTwoDays($day1, $day2)
+    {
+        $second1 = strtotime($day1);
+        $second2 = strtotime($day2);
+
+        if ($second1 < $second2) {
+            $tmp = $second2;
+            $second2 = $second1;
+            $second1 = $tmp;
+        }
+        return ($second1 - $second2) / 86400;
+    }
+
+    public function workDays($month , $free2days = false , $free1days = false)
+    {
+        $firstDay = $month.'-01';
+        $lastDay = date('Y-m-d',strtotime('-1 day',strtotime('+1 month',strtotime($firstDay))));
+        $allDay = $this->diffBetweenTwoDays($firstDay,$lastDay);
+        if($free2days){
+            $date = $firstDay;
+            $freeDay = 0;
+            while($date <= $lastDay){
+                $week = date('w',strtotime($date));
+                if($week ==0 || $week == 6){
+                    $freeDay ++;
+                }
+                $date = date('Y-m-d',strtotime('+1 day',strtotime($date)));
+            }
+        }elseif($free1days){
+            $date = $firstDay;
+            $freeDay = 0;
+            while($date <= $lastDay){
+                $week = date('w',strtotime($date));
+                if($week ==0){
+                    $freeDay ++;
+                }
+                $date = date('Y-m-d',strtotime('+1 day',strtotime($date)));
+            }
+        }else{
+            $freeDay = 0;
+        }
+        return $allDay - $freeDay;
+    }
 
 }

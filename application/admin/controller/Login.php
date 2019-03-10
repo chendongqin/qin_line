@@ -30,7 +30,7 @@ class Login extends Base{
         if(!$res){
             return $this->returnJson('用户名不存在或密码错误',1000);
         }
-        Session::push('admin_user',$admin);
+        Session::push('admin',$admin);
         $admin['loginTime'] = date('Y-m-d H:i:s');
         Db::name('admin')->update($admin);
         return $this->returnJson('登陆成功',1001,true);
