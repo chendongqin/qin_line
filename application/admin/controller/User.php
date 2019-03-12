@@ -54,8 +54,9 @@ class user extends Adminbase{
     public function update(){
         $id = $this->getParam('id');
         if(!$user = Db::name('user')->where(array('id'=>$id,'isdel'=>0))->find()){
-            return $this->returnJson('教师不存在');
+            return $this->returnJson('用户不存在');
         }
+        $user['sex'] = $this->getParam('sex',$user['sex'],'int');
         $user['user_name'] = $this->getParam('userName');
         $user['mobile'] = $this->getParam('mobile');
         if(!Verify::isMobile($user['mobile'])){
@@ -113,6 +114,9 @@ class user extends Adminbase{
         $courseId = $this->getParam('courseId');
         if(!$course = Db::name('course')->where(array('id'=>$courseId))->find())
             return $this->returnJson('课程不存在');
+        if($courseIn = Db::name('course_in')->where(array('user_id'=>$userId,'course_id'=>$courseId))){
+            return $this->returnJson('该用户已报名该课程');
+        }
         $today = date('Ymd');
         if($course['begin_date']<$today)
             return $this->returnJson('课程已开始');

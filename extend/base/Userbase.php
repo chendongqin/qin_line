@@ -7,6 +7,7 @@
  */
 namespace base;
 use think\Session;
+use think\Db;
 class Userbase extends Base {
     protected $_ec = array(
 //        'user'=>array( 'index'),
@@ -22,6 +23,7 @@ class Userbase extends Base {
         if($this->isFilter()===false and empty($user)){
             return $this->redirect('/user/login');
         }
+        $user = Db::name('user')->where('id',$user['id'])->find();
         $this->assign('user',$user);
         Session::delete('user');
         Session::push('user',$user);

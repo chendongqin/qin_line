@@ -7,6 +7,7 @@
  */
 namespace base;
 use think\Session;
+use think\Db;
 
 class Teacherbase extends Base {
     protected $_ec = array(
@@ -25,6 +26,7 @@ class Teacherbase extends Base {
                 return $this->redirect('/techer/login');
             }
         }
+        $owner = Db::name('teacher')->where('id',$owner['id'])->find();
         $this->assign('teacher',$owner);
         Session::delete('teacher');
         Session::push('teacher',$owner);

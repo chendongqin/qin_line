@@ -19,6 +19,33 @@ use think\Db;
       * @throws \think\exception\DbException
       */
      public function index(){
+         $where = ['is_down'=>0];
+         $name = $this->getParam('name');
+         if($name){
+             $where['goods_name'] = array('like',$name.'%');
+         }
+         $pageLimit = $this->getParam('pageLimit',15,'int');
+         $page = $this->getParam('page',1,'int');
+         $pager = Db::name('goods')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
+         $this->assign('pager',$pager);
+         $this->assign('page',$page);
+         $this->assign('pageLimit',$pageLimit);
+         return $this->fetch();
+     }
+
+     public function course(){
+         $today = date('Ymd');
+         $where = ['end_date'=>array('>=',$today)];
+         $name = $this->getParam('name');
+         if($name){
+             $where['course_name'] = array('like',$name.'%');
+         }
+         $pageLimit = $this->getParam('pageLimit',15,'int');
+         $page = $this->getParam('page',1,'int');
+         $pager = Db::name('goods')->where($where)->paginate($pageLimit,false,array('page'=>$page))->toArray();
+         $this->assign('pager',$pager);
+         $this->assign('page',$page);
+         $this->assign('pageLimit',$pageLimit);
          return $this->fetch();
      }
 

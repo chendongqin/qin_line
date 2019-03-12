@@ -57,6 +57,7 @@ class Teacher extends Adminbase{
         if(!is_numeric($data['salary'])){
             return $this->returnJson('工资格式不正确');
         }
+        $teacher['sex'] = $this->getParam('sex',0,'int');
         $pwd = $this->getParam('password');
         if(strlen($pwd)<6){
             return $this->returnJson('密码长度大于6位');
@@ -105,6 +106,7 @@ class Teacher extends Adminbase{
             return $this->returnJson('工资格式不正确');
         }
         $teacher['birthday'] = date('Y-m-d',strtotime($this->getParam('birthday',date('Y-m-d'))));
+        $teacher['sex'] = $this->getParam('sex',$teacher['sex'],'int');
         $teacher['update_at'] = date('YmdHis');
         $res = Db::name('teacher')->update($teacher);
         if(!$res)

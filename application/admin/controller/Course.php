@@ -10,7 +10,7 @@ use base\Adminbase;
 use think\Session;
 use think\Db;
 use ku\Verify;
-class user extends Adminbase{
+class Course extends Adminbase{
 
     private $rank = array('初级教师','中级教师','高级教师','特级教师');
     public function index(){
