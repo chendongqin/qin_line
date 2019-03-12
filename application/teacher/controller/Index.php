@@ -82,6 +82,21 @@ class index extends Teacherbase
         $this->assign('page',$page);
     }
 
+    public function haveclass(){
+        $teacher = Session::get('teacher');
+        $teacher = isset($teacher[0])?$teacher[0]:$teacher;
+        $courseId = $this->getParam('id');
+        $where = array('teacher_id'=>$teacher['id'],'id'=>$courseId);
+        $course = Db::name('course')->where($where)->find();
+        if (empty($course))
+            return $this->returnJson('课程不存在');
+        $course['long_time'] = 'long_time+1';
+        $res = Db::name('course')->update($course);
+        if($res)
+            return $this->returnJson('成功',1001,true);
+        return $this->returnJson('失败');
+    }
+
     //获取该课程的学生   默认排序为10
     public function courseStudents(){
         $teacher = Session::get('teacher');
