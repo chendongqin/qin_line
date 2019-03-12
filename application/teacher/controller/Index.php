@@ -82,6 +82,7 @@ class index extends Teacherbase
         $this->assign('page',$page);
     }
 
+    //上课
     public function haveclass(){
         $teacher = Session::get('teacher');
         $teacher = isset($teacher[0])?$teacher[0]:$teacher;
