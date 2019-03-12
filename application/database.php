@@ -12,7 +12,8 @@
 return [
     // 数据库类型
     'type'            => 'mysql',
-   'hostname'        => '127.0.0.1',
+//   'hostname'        => '127.0.0.1',
+   'hostname'        => '120.77.223.100',
     // 数据库名
     'database'        => 'qin_line',
     // 用户名
