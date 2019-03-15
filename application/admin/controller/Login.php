@@ -11,6 +11,11 @@ class Login extends Base{
      * @return mixed
      */
     public function index(){
+        $admin = Session::get('admin');
+        $admin = isset($admin[0])?$admin[0]:$admin;
+        if(!empty($admin)){
+            return $this->redirect('/admin/');
+        }
         return $this->fetch();
     }
 
