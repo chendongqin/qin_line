@@ -263,7 +263,7 @@ use think\Db;
 
      //取消订单
      public function cancelOrder(){
-         $user = Session::get('teacher');
+         $user = Session::get('user');
          $user = isset($user[0])?$user[0]:$user;
          $orderId = $this->getParam('orderId');
          $where = array(

@@ -86,8 +86,14 @@ var neonLogin = neonLogin || {};
 					}
 					// Send data to the server
 					let urlType = $('#form_login').attr('data-type');
+					var url ='/user/login/i/';
+					if(urlType == 'teacher'){
+						url = '/teacher/login/i/';
+					}else if(urlType == 'admin'){
+						url = '/admin/login/i';
+					}
 					$.ajax({
-						url: urlType == 'user' ? '/user/login/i/' : urlType == 'teacher' ? '/teacher/login/i/' : '/admin/login/i',
+						url: url,
 						method: 'POST',
 						dataType: 'json',
 						data: $form.serialize(),
