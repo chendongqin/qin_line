@@ -1,0 +1,257 @@
+{include file="../application/index/view/public/header.phtml" /}
+<div class="page-container page-width">
+  {include file="../application/index/view/public/admin-side.phtml" /}
+  <div class="main-content">
+    {include file="../application/index/view/public/admin-info.phtml" /}
+    <ol class="breadcrumb bc-3">
+      <li>
+        <a href="/admin/index"><i class="entypo-home"></i>首页</a>
+      </li>
+      <li class="active">
+        <strong>学生列表</strong>
+      </li>
+    </ol>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
+        <thead class="th-color">
+          <tr>
+            <th>学号</th>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>账户余额</th>
+            <th>出生年月</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$data):?>
+              <tr role="row">
+                <td><?php echo $data['user_no'];?></td>
+                <td><?php echo $data['user_name'];?></td>
+                <td><?php echo $data['mobile'];?></td>
+                <td><?php echo $data['balance'];?></td>
+                <td><?php echo $data['birthday'];?></td>
+                <td>
+                  <a class="btn btn-green btn-sm rechargeUser" data-id="<?php echo $data['id'];?>">充值</a>
+                  <a class="btn btn-green btn-sm editUser" data-info="<?php echo implode(',', $data);?>">编辑</a>
+                  <a class="btn btn-green btn-sm editUserPwd" data-id="<?php echo $data['id'];?>">密码重置</a>
+                  <a class="btn btn-green btn-sm attend" data-id="<?php echo $data['id'];?>">报名课程</a>
+                  <a class="btn btn-red btn-sm delUser" data-id="<?php echo $data['id'];?>">删除</a>
+                </td>
+              </tr>
+            <?php endforeach;?>
+          <?php else:?>
+            <td colspan="6" style="text-align: center;">暂无信息</td>
+          <?php endif;?>
+        </tbody>
+      </table>
+    </div>
+    {include file="../application/index/view/public/pager.phtml" /}
+  </div>
+
+  <!-- 充值弹窗 start -->
+  <div class="modal fade" id="rechargeUserModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>余额充值</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="rechargeForm">
+            <input type="hidden" name="id" class="form-control" id="rechargeId">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="amount">金额</label>
+              <div class="col-md-6">
+                <input type="Number" name="amount" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="rechargeUser">充值</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 充值弹窗 end -->
+
+  <!-- 编辑弹窗 start -->
+  <div class="modal fade" id="editUserModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>编辑学生信息</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="editForm">
+            <input type="hidden" name="id" class="form-control" id="eId">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="userName">姓名</label>
+              <div class="col-md-6">
+                <input type="text" name="userName" class="form-control" id="eUserName">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="mobile">手机</label>
+              <div class="col-md-6">
+                <input type="text" name="mobile" class="form-control" id="eMobile">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="birthday">出生年月</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="birthday" id="eBirthday">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="editUser">编辑</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 编辑弹窗 end -->
+
+  <!-- 重置弹窗 start --> 
+  <div class="modal fade" id="resetUserModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>密码重置</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="resetForm">
+            <input type="hidden" name="id" class="form-control" id="resetId">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="password">密码</label>
+              <div class="col-md-6">
+                <input type="password" name="password" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="resetUser">重置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 重置弹窗 end --> 
+
+  <!-- 报名弹窗 start --> 
+  <div class="modal fade" id="attendUserModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>课程报名</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="attendForm">
+            <input type="hidden" name="userId" class="form-control" id="attendId">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="courseId">课程ID</label>
+              <div class="col-md-6">
+                <input type="text" name="courseId" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="attend">报名</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 报名弹窗 end -->
+</div>
+
+<script type="text/javascript">
+  (() => {
+    // 充值余额
+    $('.rechargeUser').click(function() {
+      $('#rechargeId').val($(this).attr('data-id'));
+      $('#rechargeUserModal').modal('show');
+    });
+    $('#rechargeUser').click(() => {
+      const params = $('#rechargeForm').serializeArray();
+      $.post('/admin/user/recharge', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 编辑学生
+    $('.editUser').click(function() {
+      const arr = $(this).attr('data-info').split(',');
+      $('#eId').val(arr[0]);
+      $('#eUserName').val(arr[4]);
+      $('#eMobile').val(arr[2]);
+      $('#eBirthday').val(arr[5]);
+      $('#editUserModal').modal('show');
+    });
+    $('#editUser').click(() => {
+      const params = $('#editForm').serializeArray();
+      $.post('/admin/user/update', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 重置密码
+    $('.editUserPwd').click(function() {
+      $('#resetId').val($(this).attr('data-id'));
+      $('#resetUserModal').modal('show');
+    });
+    $('#resetUser').click(() => {
+      const params = $('#resetForm').serializeArray();
+      $.post('/admin/user/unsetpwd', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 课程报名
+    $('.attend').click(function() {
+      $('#attendId').val($(this).attr('data-id'));
+      $('#attendUserModal').modal('show');
+    });
+    $('#attend').click(() => {
+      const params = $('#attendForm').serializeArray();
+      $.post('/admin/user/attend', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 删除教师
+    $('.delUser').click(function() {
+      if (window.confirm('确定删除该学生？')) {
+        const params = {
+          id: $(this).attr('data-id')
+        }
+        $.post('/admin/user/del', params, (res) => {
+          if (res.status === true) {
+            location.reload();
+          } else {
+            alert(res.msg);
+          }
+        });
+      }
+    });
+  })();
+</script>
+{include file="../application/index/view/public/footer.phtml" /}

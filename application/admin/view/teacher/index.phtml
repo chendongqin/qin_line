@@ -1,0 +1,302 @@
+{include file="../application/index/view/public/header.phtml" /}
+<div class="page-container page-width">
+  {include file="../application/index/view/public/admin-side.phtml" /}
+  <div class="main-content">
+    {include file="../application/index/view/public/admin-info.phtml" /}
+    <ol class="breadcrumb bc-3">
+      <li>
+        <a href="/admin/index"><i class="entypo-home"></i>首页</a>
+      </li>
+      <li class="active">
+        <strong>教师列表</strong>
+      </li>
+    </ol>
+    <div class="dataTables_wrapper form-inline">
+      <div class="row screen-sm">
+        <div class="col-lg-12">
+          <div class="pull-right">
+            <a class="btn btn-green btn-sm" id="showAddTeaModal">添加教师</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
+        <thead class="th-color">
+          <tr>
+            <th>教师工号</th>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>级别</th>
+            <th>工资</th>
+            <th>性别</th>
+            <th>出生年月</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$data):?>
+              <tr role="row">
+                <td><?php echo $data['teacher_no'];?></td>
+                <td><?php echo $data['teacher_name'];?></td>
+                <td><?php echo $data['mobile'];?></td>
+                <td><?php echo $rank[$data['rank']];?></td>
+                <td><?php echo $data['salary'];?></td>
+                <td><?php echo $data['sex'] == 0 ? '男' : '女';?></td>
+                <td><?php echo $data['birthday'];?></td>
+                <th>
+                  <a class="btn btn-green btn-sm editTea" data-info="<?php echo implode(',', $data);?>">编辑</a>
+                  <a class="btn btn-green btn-sm editTeacherPwd" data-id="<?php echo $data['id'];?>">密码重置</a>
+                  <a class="btn btn-red btn-sm delTea" data-id="<?php echo $data['id'];?>">删除</a>
+                </th>
+              </tr>
+            <?php endforeach;?>
+          <?php else:?>
+            <td colspan="8" style="text-align: center;">暂无信息</td>
+          <?php endif;?>
+        </tbody>
+      </table>
+    </div>
+    {include file="../application/index/view/public/pager.phtml" /}
+  </div>
+
+  <!-- 添加弹窗 start -->
+  <div class="modal fade" id="addTeaModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>添加教师</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="addForm">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="teacher_name">姓名</label>
+              <div class="col-md-6">
+                <input type="text" name="teacherName" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="mobile">手机</label>
+              <div class="col-md-6">
+                <input type="text" name="mobile" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="password">密码</label>
+              <div class="col-md-6">
+                <input type="password" name="password" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sex" class="col-sm-3 control-label">性别</label>
+              <div class="col-sm-9">
+                  <label class="radio-inline">
+                    <input type="radio" name="sex" value="0" checked>男
+                  </label>
+
+                  <label class="radio-inline">
+                     <input type="radio" name="sex" value="1">女
+                  </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="birthday">出生年月</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="birthday">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="salary">薪水</label>
+              <div class="col-md-6">
+                <input type="text" name="salary" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="rank">教师等级</label>
+              <div class="col-md-6">
+                <select name="rank" class="form-control">
+                  <option value="0" selected="selected">初级教师</option>
+                  <option value="1">中级教师</option>
+                  <option value="3">高级教师</option>
+                  <option value="4">特技教师</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="addTea">添加</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 添加弹窗 end -->
+
+  <!-- 编辑弹窗 start -->
+  <div class="modal fade" id="editTeaModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>编辑教师</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="editForm">
+            <input type="hidden" name="id" class="form-control" id="eId">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="teacher_name">姓名</label>
+              <div class="col-md-6">
+                <input type="text" name="teacherName" class="form-control" id="eTeacherName">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="mobile">手机</label>
+              <div class="col-md-6">
+                <input type="text" name="mobile" class="form-control" id="eMobile">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sex" class="col-sm-3 control-label">性别</label>
+              <div class="col-sm-9">
+                  <label class="radio-inline">
+                    <input type="radio" name="sex" value="0" checked>男
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="sex" value="1">女
+                  </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="birthday">出生年月</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="birthday" id="eBirthday">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="salary">薪水</label>
+              <div class="col-md-6">
+                <input type="text" name="salary" class="form-control" id="eSalary">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="rank">教师等级</label>
+              <div class="col-md-6">
+                <select name="rank" class="form-control" id="eRank">
+                  <option value="0" selected="selected">初级教师</option>
+                  <option value="1">中级教师</option>
+                  <option value="2">高级教师</option>
+                  <option value="3">特技教师</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="editTea">编辑</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 编辑弹窗 end -->
+
+  <!-- 重置弹窗 start --> 
+  <div class="modal fade" id="resetTeaModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>密码重置</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="resetForm">
+            <input type="hidden" name="id" class="form-control" id="resetId">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="password">密码</label>
+              <div class="col-md-6">
+                <input type="password" name="password" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="resetTea">重置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 重置弹窗 end --> 
+</div>
+
+<script type="text/javascript">
+  (() => {
+    // 添加教师
+    $('#showAddTeaModal').click(() => {
+      $('#addTeaModal').modal('show');
+    });
+    $('#addTea').click(() => {
+      const params = $('#addForm').serializeArray();
+      $.post('/admin/teacher/add', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 编辑教师
+    $('.editTea').click(function() {
+      const arr = $(this).attr('data-info').split(',');
+      $('#eId').val(arr[0]);
+      $('#eTeacherName').val(arr[4]);
+      $('#eMobile').val(arr[2]);
+      $('#eBirthday').val(arr[5]);
+      $('#eSalary').val(arr[9]);
+      $('#eRank').val(arr[8]);
+      $($('#editForm').find('input[name="sex"]').eq(arr[12])).prop('checked', true);
+      $('#editTeaModal').modal('show');
+    });
+    $('#editTea').click(() => {
+      const params = $('#editForm').serializeArray();
+      $.post('/admin/teacher/update', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 重置密码
+    $('.editTeacherPwd').click(function() {
+      $('#resetId').val($(this).attr('data-id'));
+      $('#resetTeaModal').modal('show');
+    });
+    $('#resetTea').click(() => {
+      const params = $('#resetForm').serializeArray();
+      $.post('/admin/teacher/unsetpwd', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 删除教师
+    $('.delTea').click(function() {
+      if (window.confirm('确定删除该教师？')) {
+        const params = {
+          id: $(this).attr('data-id')
+        }
+        $.post('/admin/teacher/del', params, (res) => {
+          if (res.status === true) {
+            location.reload();
+          } else {
+            alert(res.msg);
+          }
+        });
+      }
+    });
+  })();
+</script>
+{include file="../application/index/view/public/footer.phtml" /}

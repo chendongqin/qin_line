@@ -126,7 +126,7 @@ class Teacher extends Adminbase{
         }
         $teacher['password'] = $this->createPwd($pwd);
         $teacher['update_at'] = date('YmdHis');
-        $res = Db::name('teacher')->update($data);
+        $res = Db::name('teacher')->update($teacher);
         if(!$res)
             return $this->returnJson('失败');
         return $this->returnJson('成功',1001,true);

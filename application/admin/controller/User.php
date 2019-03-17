@@ -56,7 +56,8 @@ class user extends Adminbase{
         if(!$user = Db::name('user')->where(array('id'=>$id,'isdel'=>0))->find()){
             return $this->returnJson('用户不存在');
         }
-        $user['sex'] = $this->getParam('sex',$user['sex'],'int');
+        // 数据库没有这个字段
+        // $user['sex'] = $this->getParam('sex',$user['sex'],'int');
         $user['user_name'] = $this->getParam('userName');
         $user['mobile'] = $this->getParam('mobile');
         if(!Verify::isMobile($user['mobile'])){
@@ -82,7 +83,7 @@ class user extends Adminbase{
         }
         $user['password'] = $this->createPwd($pwd);
         $user['update_at'] = date('YmdHis');
-        $res = Db::name('teacher')->update($user);
+        $res = Db::name('user')->update($user);
         if(!$res)
             return $this->returnJson('失败');
         return $this->returnJson('成功',1001,true);
@@ -97,7 +98,7 @@ class user extends Adminbase{
         $amount = $this->getParam('amount');
         if(!is_numeric($amount))
             return $this->returnJson('金额格式不能正确');
-        $user['balance'] = 'balance+'.$amount;
+        $user['balance'] += $amount;
         $res = Db::name('user')->update($user);
         if(!$res)
             return $this->returnJson('失败');

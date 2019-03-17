@@ -56,7 +56,7 @@ class Course extends Adminbase{
         $course['course_name'] = $this->getParam('courseName');
         $course['rooms'] = $this->getParam('roomsName');
         $course['begin_date'] = date('Y-m-d',strtotime($this->getParam('beginDate')));
-        $course['end_date'] = date('Y-m-d',strtotime($this->getParam('beginDate')));
+        $course['end_date'] = date('Y-m-d',strtotime($this->getParam('endDate')));
         if($course['begin_date'] < date('Y-m-d'))
             return $this->returnJson('开始时间不能小于当前时间');
         if($course['begin_date'] >$course['end_date'])
@@ -81,7 +81,7 @@ class Course extends Adminbase{
         }
         if($course['people']>0)
             return $this->returnJson('已有学生报名，无法删除');
-        $res = Db::name('user')->delete(array('id'=>$id));
+        $res = Db::name('course')->delete(array('id'=>$id));
         if(!$res)
             return $this->returnJson('失败');
         return $this->returnJson('成功',1001,true);

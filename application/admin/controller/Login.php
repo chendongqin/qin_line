@@ -25,7 +25,7 @@ class Login extends Base{
         if(!empty($admin)){
             return $this->returnJson('用户已登陆',1001,true);
         }
-        $useName = $this->getParam('userName','','string');
+        $useName = $this->getParam('username','','string');
         $password = $this->getParam('password','','string');
         $admin = Db::name('admin')->where(array('user_name'=>$useName))->find();
         if(empty($admin)){

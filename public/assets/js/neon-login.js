@@ -85,15 +85,16 @@ var neonLogin = neonLogin || {};
 						
 					}
 					// Send data to the server
+					let urlType = $('#form_login').attr('data-type');
 					$.ajax({
-						url: $('#form_login').attr('data-type') == 'user' ? '/user/login/i/' : '/teacher/login/i/',
+						url: urlType == 'user' ? '/user/login/i/' : urlType == 'teacher' ? '/teacher/login/i/' : '/admin/login/i',
 						method: 'POST',
 						dataType: 'json',
 						data: $form.serialize(),
-						error: function(){
-							alert("登录错误!");
-							location.reload();
-						},	
+						// error: function(){
+						// 	alert("登录错误!");
+						// 	location.reload();
+						// },	
 						success: function(json){						
 							// Form is fully completed, we update the percentage
 							neonLogin.setPercentage(100);
@@ -102,10 +103,10 @@ var neonLogin = neonLogin || {};
 								if(json['status']){
 									// Redirect to login page
 									setTimeout(function(){
-										var url = '/user';
-										if(json['data']&&json['data']['url']){
-											url = json['data']['url'];
-										}
+										var url = '/' + urlType + '/index';
+										// if(json['data']&&json['data']['url']){
+										// 	url = json['data']['url'];
+										// }
 										window.location.href = url;
 									}, 400);
 								}else{
