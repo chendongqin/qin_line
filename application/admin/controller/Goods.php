@@ -105,7 +105,21 @@ class Goods extends Adminbase{
         return $this->fetch();
     }
 
-
+    //添加库存
+    public function addstock()
+    {
+        $id = $this->getParam('id');
+        if(!$goods = Db::name('goods')->where('id',$id)->find()){
+            return $this->returnJson('商品不存在啊');
+        }
+        $num = $this->getParam('num',0,'int');
+        $goods['stock'] += $num;
+        $res = Db::name('goods')->update($goods);
+        if($res){
+            return $this->returnJson('成功',1001,true);
+        }
+        return $this->returnJson('失败');
+    }
 
 
 }

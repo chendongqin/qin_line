@@ -118,7 +118,13 @@ class Course extends Adminbase{
         return $this->returnJson('成功',1001,true);
     }
 
-
+    //获取课程信息
+    public function getcourse()
+    {
+        $id = $this->getParam('id');
+        $data = Db::name('course')->where('id',$id)->find();
+        return $this->returnJson('成功',1001,true,$data);
+    }
 
 
 }
