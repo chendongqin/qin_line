@@ -23,7 +23,7 @@ class Teacherbase extends Base {
         //$this->isFilter()判断该访问方法是否为过滤访问方法
         if($this->isFilter()===false){
             if(empty($owner)){
-                return $this->redirect('/techer/login');
+                return $this->redirect('/teacher/login');
             }
         }
         $owner = Db::name('teacher')->where('id',$owner['id'])->find();

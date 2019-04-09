@@ -1,0 +1,69 @@
+{include file="../application/index/view/public/header.phtml" /}
+<div class="page-container page-width">
+  {include file="../application/index/view/public/teacher-side.phtml" /}
+  <div class="main-content">
+    {include file="../application/index/view/public/teacher-info.phtml" /}
+    <ol class="breadcrumb bc-3">
+      <li>
+        <a href="/teacher/index"><i class="entypo-home"></i>首页</a>
+      </li>
+      <li class="active">
+        <strong>课程列表</strong>
+      </li>
+    </ol>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
+        <thead class="th-color">
+          <tr>
+            <th>课程名称</th>
+            <th>教室</th>
+            <th>报名人数</th>
+            <th>最大报名人数</th>
+            <th>上课时间</th>
+            <th>开始日期</th>
+            <th>结束日期</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$data):?>
+              <tr role="row">
+                <td><?php echo $data['course_name'] ;?></td>
+                <td><?php echo $data['rooms'] ;?></td>
+                <td><?php echo $data['people'] ;?></td>
+                <td><?php echo $data['max_people'] ;?></td>
+                <td><?php echo $data['begin_at'] ;?> -- <?php echo $data['end_at'] ;?></td>
+                <td><?php echo $data['begin_date'] ;?></td>
+                <td><?php echo $data['end_date'] ;?></td>
+                <td>
+                  <?php if (time() < strtotime($data['end_date']) && time() > strtotime($data['begin_date'])) : ;?>
+                    <a class="btn btn-info btn-sm work" data-id="<?php echo $data['id'] ;?>">上课</a>
+                  <?php endif ;?>
+                  <a class="btn btn-green btn-sm" href="/teacher/index/student?id=<?php echo $data['id'] ;?>">查看学生信息</a>
+                </td>
+              </tr>
+            <?php endforeach;?>
+          <?php else:?>
+          <?php endif;?>
+        </tbody>
+      </table>
+    </div>
+    {include file="../application/index/view/public/pager.phtml" /}
+  </div>
+</div>
+
+<script type="text/javascript">
+  (() => {
+    // 打卡
+    $('.work').click(function() {
+      const params = {
+        id: $(this).attr('data-id')
+      }
+      $.post('/teacher/index/haveclass', params, function(res) {
+        alert(res.status === true ? '打卡成功' : '打卡失败');
+      })
+    });
+  })();
+</script>
+{include file="../application/index/view/public/footer.phtml" /}

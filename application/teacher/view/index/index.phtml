@@ -1,0 +1,101 @@
+{include file="../application/index/view/public/header.phtml" /}
+<style type="text/css">
+  blockquote {
+    overflow: hidden;
+  }
+  p.dark {
+    margin: 0;
+    height: 60px;
+    line-height: 60px;
+  }
+  .dark {
+    color: #333;
+  }
+  .dark span {
+    color: #666;
+  }
+  .right {
+    float: right;
+  }
+</style>
+<div class="page-container page-width">
+  {include file="../application/index/view/public/teacher-side.phtml" /}
+  <div class="main-content">
+    {include file="../application/index/view/public/teacher-info.phtml" /}
+    <div class="row">
+      <div class="col-md-5">
+        <blockquote class="blockquote-default">
+          <p class="dark">工号：<span><?php echo $teacher['teacher_no'] ;?></span></p>
+          <p class="dark">姓名：<span><?php echo $teacher['teacher_name'] ;?></span></p>
+          <p class="dark">手机号：<span><?php echo $teacher['mobile'] ;?></span></p>
+          <p class="dark">职称：<span><?php echo $teacher['rank'] ;?></span></p>
+          <p class="dark">生日：<span><?php echo $teacher['birthday'] ;?></span></p>
+          <p class="dark">薪资：<span><?php echo $teacher['salary'] ;?></span></p>
+          <p class="right"><button class="btn btn-info" id="showEditModal">编辑个人信息</button></p>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+  <!-- 编辑弹窗 start -->
+  <div class="modal fade" id="editTeaModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>编辑个人信息</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="editForm">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="teacher_name">姓名</label>
+              <div class="col-md-6">
+                <input type="text" name="teacherName" class="form-control" value="<?php echo $teacher['teacher_name'] ;?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sex" class="col-sm-3 control-label">性别</label>
+              <div class="col-sm-9">
+                  <label class="radio-inline">
+                    <input type="radio" name="sex" value="0" <?php echo ($teacher['sex'] == 0 ? 'checked' : '') ;?>>男
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="sex" value="1" <?php echo ($teacher['sex'] == 1 ? 'checked' : '') ;?>>女
+                  </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="birthday">出生年月</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="birthday" value="<?php echo $teacher['birthday'] ;?>">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="editTea">编辑</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 编辑弹窗 end -->
+</div>
+<script type="text/javascript">
+  (() => {
+    // 添加管理员
+    $('#showEditModal').click(() => {
+      $('#editTeaModal').modal('show');
+    });
+    $('#editTea').click(() => {
+      const params = $('#editForm').serializeArray();
+      $.post('/teacher/index/update', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+  })();
+</script>
+{include file="../application/index/view/public/footer.phtml" /}

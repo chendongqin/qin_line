@@ -48,7 +48,7 @@
                 <td><?php echo $data['begin_date'];?></td>
                 <td><?php echo $data['end_date'];?></td>
                 <td>
-                  <a class="btn btn-green btn-sm editCourse">编辑</a>
+                  <a class="btn btn-green btn-sm editCourse" data-id="<?php echo $data['id'];?>">编辑</a>
                   <a class="btn btn-red btn-sm delCourse" data-id="<?php echo $data['id'];?>">删除</a>
                 </td>
               </tr>
@@ -68,11 +68,10 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4>编辑课程信息</h4>
+          <h4>添加课程信息</h4>
         </div>
         <div class="modal-body">
           <form class="form-horizontal form-groups-bordered form-static" id="addForm">
-            <input type="hidden" name="id" class="form-control" id="eId">
             <div class="form-group">
               <label class="control-label col-md-3" for="courseName">课程名称</label>
               <div class="col-md-6">
@@ -104,25 +103,25 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3" for="beginDate">开始时间</label>
+              <label class="control-label col-md-3" for="beginDate">开始日期</label>
               <div class="col-md-6">
                 <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="beginDate">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3" for="endDate">结束时间</label>
+              <label class="control-label col-md-3" for="endDate">结束日期</label>
               <div class="col-md-6">
                 <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="endDate">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3" for="begin_at">begin_at</label>
+              <label class="control-label col-md-3" for="begin_at">开始时间</label>
               <div class="col-md-6">
                 <input type="text" class="form-control" name="begin_at">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3" for="end_at">end_at</label>
+              <label class="control-label col-md-3" for="end_at">结束时间</label>
               <div class="col-md-6">
                 <input type="text" class="form-control" name="end_at">
               </div>
@@ -143,30 +142,66 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4>没有获取课程信息的接口</h4>
+          <h4>编辑课程信息</h4>
         </div>
         <div class="modal-body">
-          <!-- <form class="form-horizontal form-groups-bordered form-static" id="editForm">
-            <input type="hidden" name="id" class="form-control" id="eId">
+          <form class="form-horizontal form-groups-bordered form-static" id="editForm">
+            <input type="text" name="id" hidden="hidden" id="eId">
             <div class="form-group">
-              <label class="control-label col-md-3" for="userName">姓名</label>
+              <label class="control-label col-md-3" for="courseName">课程名称</label>
               <div class="col-md-6">
-                <input type="text" name="userName" class="form-control" id="eUserName">
+                <input type="text" name="courseName" class="form-control">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3" for="mobile">手机</label>
+              <label class="control-label col-md-3" for="roomsName">教室名称</label>
               <div class="col-md-6">
-                <input type="text" name="mobile" class="form-control" id="eMobile">
+                <input type="text" name="roomsName" class="form-control">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3" for="birthday">出生年月</label>
+              <label class="control-label col-md-3" for="teacherId">教师ID</label>
               <div class="col-md-6">
-                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="birthday" id="eBirthday">
+                <input type="text" name="teacherId" class="form-control">
               </div>
             </div>
-          </form> -->
+            <div class="form-group">
+              <label class="control-label col-md-3" for="maxPeople">最大上课人数</label>
+              <div class="col-md-6">
+                <input type="text" name="maxPeople" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="fee">费用</label>
+              <div class="col-md-6">
+                <input type="text" name="fee" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="beginDate">开始日期</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="beginDate">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="endDate">结束日期</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="endDate">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="begin_at">开始时间</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="begin_at">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="end_at">结束时间</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control" name="end_at">
+              </div>
+            </div>
+          </form>
         </div>
         <div class="modal-footer">
           <button class="btn btn-info" id="editCourse">编辑</button>
@@ -195,12 +230,24 @@
     });
     // 编辑课程信息
     $('.editCourse').click(function() {
-      // const arr = $(this).attr('data-info').split(',');
-      // $('#eId').val(arr[0]);
-      // $('#eUserName').val(arr[4]);
-      // $('#eMobile').val(arr[2]);
-      // $('#eBirthday').val(arr[5]);
-      $('#editCourseModal').modal('show');
+      const params = {
+        id: $(this).attr('data-id')
+      };
+      $.post('/admin/course/getcourse', params, (res) => {
+        if (res.status === true) {
+          $('#eId').val(res.data.id);
+          $('#editForm input[name="courseName"]').val(res.data.course_name);
+          $('#editForm input[name="roomsName"]').val(res.data.rooms);
+          $('#editForm input[name="teacherId"]').val(res.data.teacher_id);
+          $('#editForm input[name="maxPeople"]').val(res.data.max_people);
+          $('#editForm input[name="fee"]').val(res.data.fee);
+          $('#editForm input[name="beginDate"]').val(res.data.begin_date);
+          $('#editForm input[name="endDate"]').val(res.data.end_date);
+          $('#editForm input[name="begin_at"]').val(res.data.begin_at);
+          $('#editForm input[name="end_at"]').val(res.data.end_at);
+          $('#editCourseModal').modal('show');
+        }
+      });
     });
     $('#editCourse').click(() => {
       const params = $('#editForm').serializeArray();

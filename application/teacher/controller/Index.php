@@ -80,6 +80,11 @@ class index extends Teacherbase
         $this->assign('pager',$courses);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
+        return $this->fetch();
+    }
+
+    public function student(){
+        return $this->fetch();
     }
 
     //上课
@@ -91,7 +96,7 @@ class index extends Teacherbase
         $course = Db::name('course')->where($where)->find();
         if (empty($course))
             return $this->returnJson('课程不存在');
-        $course['long_time'] = 'long_time+1';
+        $course['long_time'] = $course['long_time'] + 1;
         $res = Db::name('course')->update($course);
         if($res)
             return $this->returnJson('成功',1001,true);
@@ -111,7 +116,7 @@ class index extends Teacherbase
         $pageLimit = $this->getParam('pageLimit',15,'int');
         $courseIns = Db::name('course_in')->where('course_id',$courseId)->paginate($pageLimit,false,array('page'=>$page))->toArray();
         $students = [];
-        foreach ($courseIns as $courseIn){
+        foreach ($courseIns['data'] as $courseIn){
             $students[$courseIn['user_id']] = Db::name('user')->where('id',$courseIn['user_id'])->find();
         }
         return $this->returnJson('成功',1001,true,$students);
