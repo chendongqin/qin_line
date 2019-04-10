@@ -35,6 +35,7 @@
   background-color: rgb(173, 195, 232);
 }
 </style>
+<?php if ($pager['total'] != 0) : ?>
 <div class="pager">
   <div class="pager-total">总数：<span ><?php echo $pager['total'];?></span></div>
   <div class="pager-list">
@@ -61,3 +62,4 @@
     <?php endif;?>
   </div>
 </div>
+<?php endif ;?>

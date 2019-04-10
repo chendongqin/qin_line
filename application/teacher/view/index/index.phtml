@@ -31,13 +31,55 @@
           <p class="dark">职称：<span><?php echo $teacher['rank'] ;?></span></p>
           <p class="dark">生日：<span><?php echo $teacher['birthday'] ;?></span></p>
           <p class="dark">薪资：<span><?php echo $teacher['salary'] ;?></span></p>
-          <p class="right"><button class="btn btn-info" id="showEditModal">编辑个人信息</button></p>
+          <p class="right">
+            <button class="btn btn-info" id="work">打卡</button>
+            <button class="btn btn-info" id="showPwdModal">修改登录密码</button>
+            <button class="btn btn-info" id="showEditModal">编辑个人信息</button>
+          </p>
         </blockquote>
       </div>
     </div>
   </div>
 
-  <!-- 编辑弹窗 start -->
+  <!-- 修改密码 start -->
+  <div class="modal fade" id="editPwdModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>修改登录密码</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="editPwdForm">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="teacher_name">原密码</label>
+              <div class="col-md-6">
+                <input type="password" name="pwd" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="teacher_name">新密码</label>
+              <div class="col-md-6">
+                <input type="password" name="newpwd" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="teacher_name">确认密码</label>
+              <div class="col-md-6">
+                <input type="password" name="sure" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="editTeaPwd">修改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 修改密码 end -->
+
+  <!-- 编辑个人信息弹窗 start -->
   <div class="modal fade" id="editTeaModal">
     <div class="modal-dialog custom-modal-dialog">
       <div class="modal-content">
@@ -78,11 +120,11 @@
       </div>
     </div>
   </div>
-  <!-- 编辑弹窗 end -->
+  <!-- 编辑个人信息弹窗 end -->
 </div>
 <script type="text/javascript">
   (() => {
-    // 添加管理员
+    // 修改个人信息
     $('#showEditModal').click(() => {
       $('#editTeaModal').modal('show');
     });
@@ -96,6 +138,29 @@
         }
       });
     });
+    // 修改登录密码
+    $('#showPwdModal').click(() => {
+      $('#editPwdModal').modal('show');
+    });
+    $('#editTeaPwd').click(() => {
+      const params = $('#editPwdForm').serializeArray();
+      $.post('/teacher/index/changepw', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 打卡
+    $('#work').click(() => {
+      $.get('/teacher/index/work', {}, (res) => {
+        // alert(res.msg);
+        if (res.status === true) {
+          location.reload();
+        }
+      });
+    })
   })();
 </script>
 {include file="../application/index/view/public/footer.phtml" /}
