@@ -21,7 +21,7 @@ class Goods extends Adminbase{
         if($name){
             $where['goods_name'] = array('like',$name.'%');
         }
-        $pager = Db::name('course')
+        $pager = Db::name('goods')
             ->where($where)
             ->order('id','desc')
             ->paginate($pageLimit,false,array('page'=>$page))
@@ -67,7 +67,7 @@ class Goods extends Adminbase{
     public function update(){
         $id = $this->getParam('id');
         if(!$goods = Db::name('goods')->where(array('id'=>$id))->find()){
-            return $this->returnJson('用户不存在');
+            return $this->returnJson('商品不存在');
         }
         $goods['goods_name'] = $this->getParam('name','','string');
         if(empty($goods['goods_name']))
@@ -78,7 +78,7 @@ class Goods extends Adminbase{
         if(!is_numeric($goods['price']))
             return $this->returnJson('价格格式错误');
         $goods['describe'] = $this->getParam('describe');
-        $res = Db::name('course')->update($goods);
+        $res = Db::name('goods')->update($goods);
         if(!$res)
             return $this->returnJson('失败');
         return $this->returnJson('成功',1001,true);
@@ -93,11 +93,12 @@ class Goods extends Adminbase{
         if($status !=100){
             $where['status'] = $status;
         }
-        $pager = Db::name('goods')
+        $pager = Db::name('goods_order')
             ->where($where)
             ->order('id','desc')
             ->paginate($pageLimit,false,array('page'=>$page))
             ->toArray();
+            var_dump($pager);
         $this->assign('pager',$pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
@@ -121,5 +122,11 @@ class Goods extends Adminbase{
         return $this->returnJson('失败');
     }
 
-
+    //获取商品信息
+    public function getgoods()
+    {
+        $id = $this->getParam('id');
+        $data = Db::name('goods')->where('id',$id)->find();
+        return $this->returnJson('成功',1001,true,$data);
+    }
 }

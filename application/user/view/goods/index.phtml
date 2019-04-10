@@ -3,6 +3,94 @@
   {include file="../application/index/view/public/user-side.phtml" /}
   <div class="main-content">
     {include file="../application/index/view/public/user-info.phtml" /}
+    <ol class="breadcrumb bc-3">
+      <li>
+        <a href="/user/index"><i class="entypo-home"></i>首页</a>
+      </li>
+      <li class="active">
+        <strong>商品列表</strong>
+      </li>
+    </ol>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
+        <thead class="th-color">
+          <tr>
+            <th>商品名称</th>
+            <th>价格</th>
+            <th>数量</th>
+            <th>描述</th>
+            <td>操作</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if(!empty($pager['data'])):?>
+            <?php foreach ($pager['data'] as $key=>$data):?>
+              <tr role="row">
+                <td><?php echo $data['goods_name'];?></td>
+                <td><?php echo $data['price'];?></td>
+                <td><?php echo $data['stock'];?></td>
+                <td><?php echo $data['describe'];?></td>
+                <td>
+                  <a class="btn btn-green btn-sm showBuyModal" data-id="<?php echo $data['id'];?>">购买</a>
+                </td>
+              </tr>
+            <?php endforeach;?>
+          <?php else:?>
+            <td colspan="9" style="text-align: center;">暂无信息</td>
+          <?php endif;?>
+        </tbody>
+      </table>
+    </div>
+    {include file="../application/index/view/public/pager.phtml" /}
   </div>
+
+  <!-- 购买商品 start -->
+  <div class="modal fade" id="buyModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>购买商品</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="buyForm">
+            <input type="number" name="goodsId" id="buyId" hidden="hidden">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="num">数量</label>
+              <div class="col-md-6">
+                <input type="number" name="goodsNum" class="form-control" id="stockNum">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="address">收获地址</label>
+              <div class="col-md-6">
+                <input type="text" name="address" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="buyGoods">购买</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 添加库存 end -->
 </div>
+<script type="text/javascript">
+  $('.showBuyModal').click(function() {
+    $('#buyId').val($(this).attr('data-id'));
+    $('#buyModal').modal('show');
+  });
+  $('#buyGoods').click(() => {
+    const params = $('#buyForm').serializeArray();
+    $.post('/user/index/buy', params, (res) => {
+      if (res.status === true) {
+        location.reload();
+      } else {
+        alert(res.msg);
+      }
+    });
+  });
+</script>
 {include file="../application/index/view/public/footer.phtml" /}

@@ -15,7 +15,7 @@ use think\Db;
      private $orderStatus = array('待支付','已支付','已收货','申请退货','退货成功','退货失败');
 
     public function index(){
-        $user = Session::get('teacher');
+        $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
         $this->assign('user',$user);
         return $this->fetch();
@@ -52,7 +52,7 @@ use think\Db;
 
     //修改信息
     public function update(){
-        $user = Session::get('teacher');
+        $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
         $user['user_name'] = $this->getParam('userName');
         $user['sex'] = $this->getParam('sex',$user['sex'],'int');
@@ -202,16 +202,16 @@ use think\Db;
          $goodsNum = $this->getParam('goodsNum',1,'int');
          if($goodsNum<=0)
              return $this->returnJson('购买数量必须大于1');
-         if($goods = Db::name('goods')->where(array('id'=>$goodsId,'is_down'=>0))->find()){
+         if(!($goods = Db::name('goods')->where(array('id'=>$goodsId,'is_down'=>0))->find())){
              return $this->returnJson('商品不存在');
          }
          if($goods['stock'] <$goodsNum)
              return $this->returnJson('库存不足');
-         $user = Session::get('teacher');
+         $user = Session::get('user');
          $user = isset($user[0])?$user[0]:$user;
          $amount = number_format($goods['price'] * $goodsNum * $goods['discount'] /100,2,'.','');
          if($user['balance'] <= $amount)
-             return $this->returnJson('用户账号月不足');
+             return $this->returnJson('用户账号余额不足');
          $address = $this->getParam('address');
          if(!$address)
              return $this->returnJson('收货地址不能为空');
@@ -226,10 +226,12 @@ use think\Db;
              'address'=>$address,
          );
          Db::startTrans();
-         $user['balance'] = 'balance-'.$amount;
+         $user['balance'] -= $amount;
+         $goods['stock'] -= $goodsNum;
          $user['update_at'] = date('YmdHis');
          $res = Db::name('user')->update($user);
-         if (!$res){
+         $resGoods = Db::name('goods')->update($goods);
+         if (!$res || !$resGoods){
              Db::rollback();
              return $this->returnJson('失败');
          }
@@ -244,7 +246,7 @@ use think\Db;
 
      //用户充值模拟,只有卡号前缀为“C350822”才充值成功
      public function recharge(){
-         $user = Session::get('teacher');
+         $user = Session::get('user');
          $user = isset($user[0])?$user[0]:$user;
          $cardNo = $this->getParam('cardNo');
          if(strpos($cardNo,'C350822') === 0){
@@ -252,7 +254,7 @@ use think\Db;
             if(!is_numeric($amount) || $amount <0){
                 return $this->returnJson('金额格式错误');
             }
-             $user['balance'] = 'balance+'.$amount;
+             $user['balance'] += $amount;
              $res = Db::name('user')->update($user);
              if(!$res)
                  return $this->returnJson('失败');

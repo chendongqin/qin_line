@@ -1,0 +1,35 @@
+{include file="../application/index/view/public/header.phtml" /}
+<div class="page-container page-width">
+  {include file="../application/index/view/public/admin-side.phtml" /}
+  <div class="main-content">
+    {include file="../application/index/view/public/admin-info.phtml" /}
+    <ol class="breadcrumb bc-3">
+      <li>
+        <a href="/admin/index"><i class="entypo-home"></i>首页</a>
+      </li>
+      <li class="active">
+        <strong>订单列表</strong>
+      </li>
+    </ol>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
+        <thead class="th-color">
+          <tr>
+            <th>商品名称</th>
+            <th>价格</th>
+            <th>上架情况</th>
+            <th>库存量</th>
+            <th>描述</th>
+            <td>操作</td>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+    {include file="../application/index/view/public/pager.phtml" /}
+  </div>
+</div>
+<script type="text/javascript">
+</script>
+{include file="../application/index/view/public/footer.phtml" /}

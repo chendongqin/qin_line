@@ -1,8 +1,203 @@
 {include file="../application/index/view/public/header.phtml" /}
+<style type="text/css">
+  blockquote {
+    overflow: hidden;
+  }
+  p.dark {
+    margin: 0;
+    height: 60px;
+    line-height: 60px;
+  }
+  .dark {
+    color: #333;
+  }
+  .dark span {
+    color: #666;
+  }
+  .right {
+    float: right;
+  }
+</style>
 <div class="page-container page-width">
   {include file="../application/index/view/public/user-side.phtml" /}
   <div class="main-content">
     {include file="../application/index/view/public/user-info.phtml" /}
+    <div class="row">
+      <div class="col-md-5">
+        <blockquote class="blockquote-default">
+          <p class="dark">学号：<span><?php echo $user['user_no'] ;?></span></p>
+          <p class="dark">姓名：<span><?php echo $user['user_name'] ;?></span></p>
+          <p class="dark">手机号：<span><?php echo $user['mobile'] ;?></span></p>
+          <p class="dark">性别：<span><?php echo ($user['sex'] == 0 ? '男' : '女') ;?></span></p>
+          <p class="dark">生日：<span><?php echo $user['birthday'] ;?></span></p>
+          <p class="dark">余额：<span><?php echo $user['balance'] ;?></span></p>
+          <p class="right">
+            <button class="btn btn-info" id="showPwdModal">修改登录密码</button>
+            <button class="btn btn-info" id="showEditModal">编辑个人信息</button>
+            <button class="btn btn-info" id="showRechargeModal">余额充值</button>
+          </p>
+        </blockquote>
+      </div>
+    </div>
   </div>
+  <!-- 修改密码 start -->
+  <div class="modal fade" id="editPwdModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>修改登录密码</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="editPwdForm">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="pwd">原密码</label>
+              <div class="col-md-6">
+                <input type="password" name="pwd" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="newpwd">新密码</label>
+              <div class="col-md-6">
+                <input type="password" name="newpwd" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="sure">确认密码</label>
+              <div class="col-md-6">
+                <input type="password" name="sure" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="editUserPwd">修改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 修改密码 end -->
+
+  <!-- 编辑个人信息弹窗 start -->
+  <div class="modal fade" id="editUserModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>编辑个人信息</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="editForm">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="userName">姓名</label>
+              <div class="col-md-6">
+                <input type="text" name="userName" class="form-control" value="<?php echo $user['user_name'] ;?>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sex" class="col-sm-3 control-label">性别</label>
+              <div class="col-sm-9">
+                  <label class="radio-inline">
+                    <input type="radio" name="sex" value="0" <?php echo ($user['sex'] == 0 ? 'checked' : '') ;?>>男
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="sex" value="1" <?php echo ($user['sex'] == 1 ? 'checked' : '') ;?>>女
+                  </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="birthday">出生年月</label>
+              <div class="col-md-6">
+                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="birthday" value="<?php echo $user['birthday'] ;?>">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="editUser">编辑</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 编辑个人信息弹窗 end -->
+
+  <!-- 余额充值 start -->
+  <div class="modal fade" id="rechargeModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>修改登录密码</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="rechargeForm">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="cardNo">银行卡号</label>
+              <div class="col-md-6">
+                <input type="text" name="cardNo" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="amount">金额</label>
+              <div class="col-md-6">
+                <input type="number" name="amount" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="recharge">充值</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 余额充值 end -->
+
 </div>
+<script type="text/javascript">
+  (() => {
+    // 修改个人信息
+    $('#showEditModal').click(() => {
+      $('#editUserModal').modal('show');
+    });
+    $('#editUser').click(() => {
+      const params = $('#editForm').serializeArray();
+      $.post('/user/index/update', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 修改登录密码
+    $('#showPwdModal').click(() => {
+      $('#editPwdModal').modal('show');
+    });
+    $('#editUserPwd').click(() => {
+      const params = $('#editPwdForm').serializeArray();
+      $.post('/user/index/changepw', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+    // 充值
+    $('#showRechargeModal').click(() => {
+      $('#rechargeModal').modal('show');
+    });
+    $('#recharge').click(() => {
+      const params = $('#rechargeForm').serializeArray();
+      $.post('/user/index/recharge', params, (res) => {
+        if (res.status === true) {
+          location.reload();
+        } else {
+          alert(res.msg);
+        }
+      });
+    });
+  })();
+</script>
 {include file="../application/index/view/public/footer.phtml" /}
