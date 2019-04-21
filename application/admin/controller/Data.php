@@ -22,7 +22,7 @@ class Data extends Adminbase{
         $data['totalMoney'] = Db::name('goods_order')->where('status in(1,2)')->sum('amount');
         $data['totalNum'] = Db::name('goods_order')->where('status in(1,2)')->sum('buy_num');
         //前三销售商品
-        $data['goodsTop3'] = Db::query("select goodsId,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` limit 0,3");
+        $data['goodsTop3'] = Db::query("select goods_id,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` limit 0,3");
         foreach ($data['goodsTop3'] as $key=>$datum){
             $goods = Db::name('goods')->where('id',$datum['goods_id']);
             $data['goodsTop3'][$key]['goods']=$goods;
@@ -89,6 +89,7 @@ class Data extends Adminbase{
         $this->assign('pager',$pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
+        var_dump($pager);
         return $this->fetch();
     }
 

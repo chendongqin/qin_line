@@ -155,9 +155,10 @@
     // 打卡
     $('#work').click(() => {
       $.get('/teacher/index/work', {}, (res) => {
-        // alert(res.msg);
         if (res.status === true) {
           location.reload();
+        } else {
+          alert(res.msg);
         }
       });
     })

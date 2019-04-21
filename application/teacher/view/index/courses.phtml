@@ -56,13 +56,13 @@
 
 <script type="text/javascript">
   (() => {
-    // 打卡
+    // 上课打卡
     $('.work').click(function() {
       const params = {
         id: $(this).attr('data-id')
       }
       $.post('/teacher/index/haveclass', params, function(res) {
-        alert(res.status === true ? '打卡成功' : '打卡失败');
+        alert(res.status === true ? '上课打卡成功' : '上课打卡失败');
       })
     });
   })();

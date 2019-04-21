@@ -48,6 +48,7 @@
                 <th>
                   <a class="btn btn-green btn-sm editTea" data-info="<?php echo implode(',', $data);?>">编辑</a>
                   <a class="btn btn-green btn-sm editTeacherPwd" data-id="<?php echo $data['id'];?>">密码重置</a>
+                  <a class="btn btn-green btn-sm" href="/admin/teacher/workdetail?id=<?php echo $data['id'] ;?>" target="_blank">打卡详情</a>
                   <a class="btn btn-red btn-sm delTea" data-id="<?php echo $data['id'];?>">删除</a>
                 </th>
               </tr>

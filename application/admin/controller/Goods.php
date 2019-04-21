@@ -98,7 +98,6 @@ class Goods extends Adminbase{
             ->order('id','desc')
             ->paginate($pageLimit,false,array('page'=>$page))
             ->toArray();
-            var_dump($pager);
         $this->assign('pager',$pager);
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);

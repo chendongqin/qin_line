@@ -40,7 +40,7 @@
         });
         $('#editPwd').click(() => {
           const params = $('#pwdForm').serializeArray();
-          $.post('/admin/index/changepw', params, (res) => {
+          $.post('/' + $('#showPwdModal').attr('data-type') + '/index/changepw', params, (res) => {
             if (res.status === true) {
               location.reload();
             } else {

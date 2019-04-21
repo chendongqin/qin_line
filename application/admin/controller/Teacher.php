@@ -156,6 +156,7 @@ class Teacher extends Adminbase{
         $this->assign('pageLimit',$pageLimit);
         $this->assign('page',$page);
         $this->assign('monthWorkDays',$monthWorkDays);
+        $this->assign('teacherId',$id);
         return $this->fetch();
     }
 
