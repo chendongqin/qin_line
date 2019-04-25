@@ -105,6 +105,27 @@ class Goods extends Adminbase{
         return $this->fetch();
     }
 
+    //处理订单取消
+    public function dealcancel(){
+        //是否取消，1为同意
+        $audit = $this->getParam('audit',0,'int');
+        $order_id = $this->getParam('order_id',0,'int');
+        $where = ['id'=>$order_id,'status'=>3];
+        if(!$order = Db::name('goods_order')->where($where)->find()){
+            return $this->returnJson('没有找到申请退款的订单：'.$order_id);
+        }
+        //退货成功,添加库存和退款
+        if($audit){
+            $order['status'] = 4;
+            Db::name('goods')->where('id',$order['goods_id'])->setInc('stock',$order['buy_num']);
+            Db::name('user')->where('id',$order['user_id'])->setInc('balance',$order['amount']);
+        }else{
+            $order['status'] = 5;
+        }
+        Db::name('goods_order')->update($order);
+        return $this->returnJson('成功',1001,true);
+    }
+
     //添加库存
     public function addstock()
     {
