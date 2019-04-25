@@ -104,7 +104,7 @@ use think\Db;
     public function mycourse(){
         $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
-        $where = array('user_id',$user['id']);
+        $where = array('user_id'=>$user['id']);
         $pageLimit = $this->getParam('pageLimit',15,'int');
         $page = $this->getParam('page',1,'int');
         $courses = [];
@@ -116,7 +116,6 @@ use think\Db;
             $courses[$key] = $course;
         }
         $pager['data'] = $courses;
-        var_dump($pager);
         $this->assign('pager',$pager);
         $this->assign('page',$page);
         $this->assign('pageLimit',$pageLimit);
@@ -128,15 +127,15 @@ use think\Db;
     {
         $user = Session::get('user');
         $user = isset($user[0])?$user[0]:$user;
-        $where = array('user_id',$user['id']);
+        $where = array('user_id'=>$user['id']);
         $pageLimit = $this->getParam('pageLimit',15,'int');
         $page = $this->getParam('page',1,'int');
         $status = $this->getParam('status',100,'int');
         if($status != 100)
             $where['status'] = $status;
         $pager = Db::name('goods_order')
-            ->where($where)->
-            order('id','desc')
+            ->where($where)
+            ->order('id','desc')
             ->paginate($pageLimit,false,array('page'=>$page))
             //对象转数组
             ->toArray();
