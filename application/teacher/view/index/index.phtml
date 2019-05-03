@@ -33,7 +33,7 @@
           <p class="dark">薪资：<span><?php echo $teacher['salary'] ;?></span></p>
           <p class="right">
             <button class="btn btn-info" id="work">打卡</button>
-            <button class="btn btn-info" id="showPwdModal">修改登录密码</button>
+            <button class="btn btn-info showPwdModal" >修改登录密码</button>
             <button class="btn btn-info" id="showEditModal">编辑个人信息</button>
           </p>
         </blockquote>
@@ -139,7 +139,7 @@
       });
     });
     // 修改登录密码
-    $('#showPwdModal').click(() => {
+    $('.showPwdModal').click(() => {
       $('#editPwdModal').modal('show');
     });
     $('#editTeaPwd').click(() => {
