@@ -155,7 +155,7 @@ use think\Db;
 
     //上课打卡
      public  function work(){
-         $user = Session::get('teacher');
+         $user = Session::get('user');
          $user = isset($user[0])?$user[0]:$user;
          $courseId = $this->getParam('courseId');
          if(!$course = Db::name('course')->where('id',$courseId)->find()){

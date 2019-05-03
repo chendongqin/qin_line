@@ -31,7 +31,7 @@ class Data extends Adminbase{
         //前五课程
         $data['courseTop5'] = Db::name('course')->order('people')->limit(5);
         foreach ($data['courseTop5'] as $key=>$datum){
-            $teacher = Db::name('teacher')->where('id',$datum['teacher_id']);
+            $teacher = Db::name('teacher')->where('id',$datum['teacher_id']).find();
             unset($teacher['password']);
             $data['courseTop5'][$key]['teacher']=$teacher;
         }
