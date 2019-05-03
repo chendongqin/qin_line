@@ -192,12 +192,13 @@ use think\Db;
          $courseId = $this->getParam('courseId');
          if(!$course = Db::name('course')->where(array('id'=>$courseId))->find())
              return $this->returnJson('课程不存在');
-         if($courseIn = Db::name('course_in')->where(array('user_id'=>$user['id'],'course_id'=>$courseId))){
+         if($courseIn = Db::name('course_in')->where(array('user_id'=>$user['id'],'course_id'=>$courseId))->find()){
              return $this->returnJson('该用户已报名该课程');
          }
-         $today = date('Ymd');
-         if($course['begin_date']<$today)
+         $today = date('Y-m-d');
+         if($course['begin_date']<$today){
              return $this->returnJson('课程已开始');
+         }
          if($user['balance'] < $course['fee']){
              return $this->returnJson('用户余额不足');
          }
@@ -215,15 +216,18 @@ use think\Db;
              Db::rollback();
              return $this->returnJson('失败');
          }
-         $user['balance'] = 'balance-'.$course['fee'];
+         $res = Db::name('user')->where('id',$user['id'])->setDec('balance',$course['fee']);
+         if(!$res){
+             Db::rollback();
+             return $this->returnJson('扣款失败');
+         }
          $user['update_at'] = date('YmdHis');
          $res = Db::name('user')->update($user);
          if(!$res){
              Db::rollback();
              return $this->returnJson('失败');
          }
-         $course['people'] = 'people+1';
-         $res = Db::name('course')->update($course);
+         $res = Db::name('course')->where('id',$course['id'])->setInc('people');
          if(!$res){
              Db::rollback();
              return $this->returnJson('失败');
