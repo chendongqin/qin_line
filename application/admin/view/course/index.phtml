@@ -24,6 +24,7 @@
       <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
         <thead class="th-color">
           <tr>
+            <th>课程ID</th>
             <th>课程名称</th>
             <th>教室名称</th>
             <th>教师ID</th>
@@ -39,6 +40,7 @@
           <?php if(!empty($pager['data'])):?>
             <?php foreach ($pager['data'] as $key=>$data):?>
               <tr role="row">
+                <td><?php echo $data['id'];?></td>
                 <td><?php echo $data['course_name'];?></td>
                 <td><?php echo $data['rooms'];?></td>
                 <td><?php echo $data['teacher_id'];?></td>
