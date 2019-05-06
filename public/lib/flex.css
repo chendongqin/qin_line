@@ -1,0 +1,84 @@
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex.center {
+  align-items: center;
+}
+.flex-1 {
+  flex: 1
+}
+
+.flex-2 {
+  flex: 2
+}
+
+.flex-3 {
+  flex: 3
+}
+
+.flex-4 {
+  flex: 4
+}
+
+.flex-5 {
+  flex: 5
+}
+
+.flex-6 {
+  flex: 6
+}
+
+.flex-7 {
+  flex: 7
+}
+
+.flex-8 {
+  flex: 8
+}
+
+.flex-9 {
+  flex: 9
+}
+.img-wrapper {
+  margin: auto;
+  background: url('/bg.jpg');
+  height: 200px;
+  text-align: center;
+  line-height: 200px;
+  width: 200px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  -webkit-filter: blur(15px);
+  -moz-filter: blur(15px);
+  -o-filter: blur(15px);
+  -ms-filter: blur(15px);
+  filter: blur(15px);
+}
+.desc-wrapper {
+  padding: 0 0 4px;
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: left;
+  color: #999;
+  border-bottom: 1px solid #eee;
+}
+.desc-wrapper:hover {
+  color: #222;
+}
+.desc {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  text-indent: 12px;
+}
+.flex .tag {
+  color: #333;
+}
