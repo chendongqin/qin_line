@@ -50,6 +50,10 @@ class Teacher extends Adminbase{
         if(!Verify::isMobile($data['mobile'])){
             return $this->returnJson('手机号格式不正确');
         }
+        $exist = DB::name('teacher')->where(['mobile'=>$data['mobile'],'isdel'=>0])->find();
+        if($exist){
+            return $this->returnJson('已存在该教师,请校验核对');
+        }
         $data['salary'] = $this->getParam('salary');
         $data['rank'] = $this->getParam('rank',0,'int');
         if(!in_array($data['rank'],array(0,1,2,3)))

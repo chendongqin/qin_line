@@ -15,8 +15,8 @@
       <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
         <thead class="th-color">
           <tr>
-            <th>商品Id</th>
-            <th>用户Id</th>
+            <th>商品名称</th>
+            <th>用户</th>
             <th>购买数量</th>
             <th>购买折扣</th>
             <th>金额</th>
@@ -28,8 +28,8 @@
           <?php if(!empty($pager['data'])):?>
             <?php foreach ($pager['data'] as $key=>$data):?>
               <tr role="row">
-                <td><?php echo $data['goods_id'];?></td>
-                <td><?php echo $data['user_id'];?></td>
+                <td><?php echo $data['goods_name'];?></td>
+                <td><?php echo $data['user_name'];?></td>
                 <td><?php echo $data['buy_num'];?></td>
                 <td><?php echo $data['discount'];?></td>
                 <td><?php echo $data['amount'];?></td>
