@@ -1,2 +1,85 @@
-111
-111
+{include file="../application/index/view/public/header.phtml" /}
+<div class="page-container page-width">
+  {include file="../application/index/view/public/user-side.phtml" /}
+  <div class="main-content">
+    {include file="../application/index/view/public/user-info.phtml" /}
+    <ol class="breadcrumb bc-3">
+      <li>
+        <a href="/index/index"><i class="entypo-home"></i>首页</a>
+      </li>
+      <li class="active">
+        <strong>商品列表</strong>
+      </li>
+    </ol>
+
+    <div class="flex center">
+      <?php if(!empty($pager['data'])):?>
+        <?php foreach ($pager['data'] as $key=>$data):?>
+          <div class="flex-2" style="position: relative;">
+            <div class="img-wrapper"></div>
+            <div class="desc-wrapper">
+              <p class="desc"><?php echo $data['describe'];?></p>
+            </div>
+            <p style="margin: 0;color: #666;;"><span class="tag">名称：</span><?php echo $data['goods_name'];?></p>
+            <p style="margin: 0;color: #666;"><span class="tag">价格：</span><?php echo $data['price'];?></p>
+            <div style="margin: 0;color: #666;">
+              <p style="margin: 0;color: #666;"><span class="tag">库存：</span><?php echo $data['stock'];?><a style="color: #71af42;padding: 0 0 0 10px;cursor: pointer;" class="showBuyModal"  data-id="<?php echo $data['id'];?>">购买</a></p>
+            </div>
+          </div>
+        <?php endforeach;?>
+      <?php endif;?>
+    </div>
+    
+    {include file="../application/index/view/public/pager.phtml" /}
+  </div>
+
+  <!-- 购买商品 start -->
+  <div class="modal fade" id="buyModal">
+    <div class="modal-dialog custom-modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>购买商品</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal form-groups-bordered form-static" id="buyForm">
+            <input type="number" name="goodsId" id="buyId" hidden="hidden">
+            <div class="form-group">
+              <label class="control-label col-md-3" for="num">数量</label>
+              <div class="col-md-6">
+                <input type="number" name="goodsNum" class="form-control" id="stockNum">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-3" for="address">收货地址</label>
+              <div class="col-md-6">
+                <input type="text" name="address" class="form-control">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-info" id="buyGoods">购买</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 购买商品 end -->
+</div>
+<script type="text/javascript">
+  $('.showBuyModal').click(function() {
+    $('#buyId').val($(this).attr('data-id'));
+    $('#buyModal').modal('show');
+  });
+  $('#buyGoods').click(() => {
+    const params = $('#buyForm').serializeArray();
+    $.post('/user/index/buy', params, (res) => {
+      if (res.status === true) {
+        location.reload();
+      } else {
+        alert(res.msg);
+      }
+    });
+  });
+</script>
+{include file="../application/index/view/public/footer.phtml" /}
