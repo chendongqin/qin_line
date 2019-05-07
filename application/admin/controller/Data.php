@@ -37,7 +37,6 @@ class Data extends Adminbase{
             $teacher['update_at']= date('Y-m-d H:i:s',strtotime($teacher['update_at']));
             $data['courseTop5'][$key]['teacher']= $teacher;
         }
-        var_dump($data);die();
         foreach ($data as $key=>$value){
             $this->assign($key,$value);
         }

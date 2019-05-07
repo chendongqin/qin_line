@@ -11,11 +11,90 @@
         <strong>数据统计</strong>
       </li>
     </ol>
+
+    <h2>数据预览</h2>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="tile-stats tile-aqua">
+          <div class="num"><span><?php echo $goodsTotal ;?>件</span></div>
+          <h3>商品总库存</h3>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="tile-stats tile-aqua">
+          <div class="num"><span><?php echo $totalMoney ;?>元</span></div>
+          <h3>总出售金额</h3>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="tile-stats tile-aqua">
+          <div class="num"><span><?php echo $totalNum ;?>件</span></div>
+          <h3>出售商品数量</h3>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="tab-pane active">
+        <div id="container" class="chart"></div>
+      </div>
+    </div>
   </div>
 </div>
+
 <?php var_dump($goodsTotal);?>
 <?php var_dump($totalMoney);?>
 <?php var_dump($totalNum);?>
 <?php var_dump($goodsTop3);?>
 <?php var_dump($courseTop5);?>
+
+{load  file="/lib/highcharts/highcharts.js" /}
+{load  file="/lib/highcharts/modules/data.js" /}
+<script>
+(() => {
+  // var chart = Highcharts.chart('container', {
+  //   chart: {
+  //     type: 'bar'
+  //   },
+  //   title: {
+  //     text: '前三销售商品'
+  //   },
+  //   xAxis: {
+  //     categories: ['非洲'],
+  //     title: {
+  //       text: null
+  //     }
+  //   },
+  //   plotOptions: {
+  //     bar: {
+  //       dataLabels: {
+  //         enabled: true,
+  //         allowOverlap: true // 允许数据标签重叠
+  //       }
+  //     }
+  //   },
+  //   legend: {
+  //     layout: 'vertical',
+  //     align: 'right',
+  //     verticalAlign: 'top',
+  //     x: -40,
+  //     y: 100,
+  //     floating: true,
+  //     borderWidth: 1,
+  //     backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+  //     shadow: true
+  //   },
+  //   series: [{
+  //     name: '第一',
+  //     data: [100]
+  //   }, {
+  //     name: '第二',
+  //     data: [133]
+  //   }, {
+  //     name: '第三',
+  //     data: [973]
+  //   }]
+  // });
+})();
+</script>
+>>>>>>> d4e1ab6e7e20a5c96d7f670837c8d7d7d7baba21
 {include file="../application/index/view/public/footer.phtml" /}
