@@ -35,66 +35,76 @@
     </div>
     <div class="panel-body">
       <div class="tab-pane active">
-        <div id="container" class="chart"></div>
+        <div id="containerBuy" class="chart"></div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="tab-pane active">
+        <div id="containerCourse" class="chart"></div>
       </div>
     </div>
   </div>
 </div>
 
-<?php var_dump($goodsTotal);?>
-<?php var_dump($totalMoney);?>
-<?php var_dump($totalNum);?>
-<?php var_dump($goodsTop3);?>
-<?php var_dump($courseTop5);?>
-
 {load  file="/lib/highcharts/highcharts.js" /}
 {load  file="/lib/highcharts/modules/data.js" /}
+
 <script>
 (() => {
-  // var chart = Highcharts.chart('container', {
-  //   chart: {
-  //     type: 'bar'
-  //   },
-  //   title: {
-  //     text: '前三销售商品'
-  //   },
-  //   xAxis: {
-  //     categories: ['非洲'],
-  //     title: {
-  //       text: null
-  //     }
-  //   },
-  //   plotOptions: {
-  //     bar: {
-  //       dataLabels: {
-  //         enabled: true,
-  //         allowOverlap: true // 允许数据标签重叠
-  //       }
-  //     }
-  //   },
-  //   legend: {
-  //     layout: 'vertical',
-  //     align: 'right',
-  //     verticalAlign: 'top',
-  //     x: -40,
-  //     y: 100,
-  //     floating: true,
-  //     borderWidth: 1,
-  //     backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-  //     shadow: true
-  //   },
-  //   series: [{
-  //     name: '第一',
-  //     data: [100]
-  //   }, {
-  //     name: '第二',
-  //     data: [133]
-  //   }, {
-  //     name: '第三',
-  //     data: [973]
-  //   }]
-  // });
+  let chartBuy = Highcharts.chart('containerBuy', {
+    chart: {
+      type: 'bar'
+    },
+    title: {
+      text: '前三销售商品'
+    },
+    xAxis: {
+      categories: ['销售数量'],
+      title: {
+        text: null
+      }
+    },
+    series: [{
+      name: '<?php echo $goodsTop3[0]['goods']['goods_name'];?>',
+      data: [<?php echo $goodsTop3[0]['allBuy'];?>]
+    }, {
+      name: '<?php echo $goodsTop3[1]['goods']['goods_name'];?>',
+      data: [<?php echo $goodsTop3[1]['allBuy'];?>]
+    }, {
+      name: '<?php echo $goodsTop3[2]['goods']['goods_name'];?>',
+      data: [<?php echo $goodsTop3[2]['allBuy'];?>]
+    }]
+  });
+  let chartCourse = Highcharts.chart('containerCourse', {
+    chart: {
+      type: 'bar'
+    },
+    title: {
+      text: '前五课程'
+    },
+    xAxis: {
+      categories: ['课程数量'],
+      title: {
+        text: null
+      }
+    },
+    series: [{
+      name: '<?php echo $courseTop5[0]['course_name'];?>',
+      data: [<?php echo $courseTop5[0]['people'];?>]
+    }, {
+      name: '<?php echo $courseTop5[1]['course_name'];?>',
+      data: [<?php echo $courseTop5[1]['people'];?>]
+    }, {
+      name: '<?php echo $courseTop5[2]['course_name'];?>',
+      data: [<?php echo $courseTop5[2]['people'];?>]
+    }, {
+      name: '<?php echo $courseTop5[3]['course_name'];?>',
+      data: [<?php echo $courseTop5[3]['people'];?>]
+    }, {
+      name: '<?php echo $courseTop5[4]['course_name'];?>',
+      data: [<?php echo $courseTop5[4]['people'];?>]
+    }]
+  });
 })();
 </script>
->>>>>>> d4e1ab6e7e20a5c96d7f670837c8d7d7d7baba21
 {include file="../application/index/view/public/footer.phtml" /}
