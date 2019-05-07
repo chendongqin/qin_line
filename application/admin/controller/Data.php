@@ -24,17 +24,20 @@ class Data extends Adminbase{
         //前三销售商品
         $data['goodsTop3'] = Db::query("select goods_id,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` limit 0,3");
         foreach ($data['goodsTop3'] as $key=>$datum){
-            $goods = Db::name('goods')->where('id',$datum['goods_id']);
+            $goods = Db::name('goods')->where('id',$datum['goods_id'])->find();
             $data['goodsTop3'][$key]['goods']=$goods;
             unset($data['goodsTop3'][$key]['goods_id']);
         }
         //前五课程
-        $data['courseTop5'] = Db::name('course')->order('people')->limit(5);
+        $data['courseTop5'] = Db::name('course')->order('people')->limit(5)->select();
         foreach ($data['courseTop5'] as $key=>$datum){
-            $teacher = Db::name('teacher')->where('id',$datum['teacher_id']).find();
+            $teacher = Db::name('teacher')->where('id',$datum['teacher_id'])->find();
             unset($teacher['password']);
-            $data['courseTop5'][$key]['teacher']=$teacher;
+            $teacher['create_at']= date('Y-m-d H:i:s',strtotime($teacher['create_at']));
+            $teacher['update_at']= date('Y-m-d H:i:s',strtotime($teacher['update_at']));
+            $data['courseTop5'][$key]['teacher']= $teacher;
         }
+        var_dump($data);die();
         foreach ($data as $key=>$value){
             $this->assign($key,$value);
         }
