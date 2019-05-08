@@ -16,19 +16,19 @@ class Data extends Adminbase{
 
     //数据预览
     public function index(){
-        //商品总库存
+        //商品总库存——统计商品表未下架的商品库存（sql的sum(stock) where is_down=0）
         $data['goodsTotal'] = Db::name('goods')->where('is_down',0)->sum('stock');
-        //总出售金额与出售商品数量
+        //总出售金额与出售商品数量——统计订单列表的卖出总金额和卖出总数量
         $data['totalMoney'] = Db::name('goods_order')->where('status in(1,2)')->sum('amount');
         $data['totalNum'] = Db::name('goods_order')->where('status in(1,2)')->sum('buy_num');
-        //前三销售商品
+        //前三销售商品——如原生sql所述select goods_id,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` limit 0,3，统计商品销售量最多的取前三条
         $data['goodsTop3'] = Db::query("select goods_id,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` limit 0,3");
         foreach ($data['goodsTop3'] as $key=>$datum){
             $goods = Db::name('goods')->where('id',$datum['goods_id'])->find();
             $data['goodsTop3'][$key]['goods']=$goods;
             unset($data['goodsTop3'][$key]['goods_id']);
         }
-        //前五课程
+        //前五课程——去课程报名人数最多的前五条
         $data['courseTop5'] = Db::name('course')->order('people')->limit(5)->select();
         foreach ($data['courseTop5'] as $key=>$datum){
             $teacher = Db::name('teacher')->where('id',$datum['teacher_id'])->find();
@@ -37,6 +37,7 @@ class Data extends Adminbase{
             $teacher['update_at']= date('Y-m-d H:i:s',strtotime($teacher['update_at']));
             $data['courseTop5'][$key]['teacher']= $teacher;
         }
+        //将数据渲染到html页面中，$key为h5参数名$key为goodsTotal，totalMoney，totalNum，goodsTop3，courseTop5
         foreach ($data as $key=>$value){
             $this->assign($key,$value);
         }
