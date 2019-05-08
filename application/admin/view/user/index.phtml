@@ -11,6 +11,15 @@
         <strong>学生列表</strong>
       </li>
     </ol>
+      <div class="dataTables_wrapper form-inline">
+          <div class="row screen-sm">
+              <div class="col-lg-12">
+                  <div class="pull-right">
+                      <a class="btn btn-green btn-sm" id="showAddUserModalButton">添加学生</a>
+                  </div>
+              </div>
+          </div>
+      </div>
     <div class="table-responsive">
       <table class="table table-bordered table-striped datatable dataTable text-nowrap custom-table-font-size">
         <thead class="th-color">
@@ -76,6 +85,67 @@
     </div>
   </div>
   <!-- 充值弹窗 end -->
+    <!-- 添加弹窗 start -->
+    <div class="modal fade" id="showAddUserModal">
+        <div class="modal-dialog custom-modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>编辑学生信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal form-groups-bordered form-static" id="addForm">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="userName">姓名</label>
+                            <div class="col-md-6">
+                                <input type="text" name="userName" class="form-control" id="eUserName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="mobile">手机</label>
+                            <div class="col-md-6">
+                                <input type="text" name="mobile" class="form-control" id="eMobile">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="mobile">密码</label>
+                            <div class="col-md-6">
+                                <input type="password" name="password" class="form-control" id="eMobile">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="mobile">余额</label>
+                            <div class="col-md-6">
+                                <input type="number" name="balance" class="form-control" id="eMobile">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex" class="col-sm-3 control-label">性别</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="0">男
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="sex" value="1">女
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="birthday">出生年月</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control datepicker" data-format="yyyy-MM-dd" data-callback="rangeChange" name="birthday" id="eBirthday">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" id="addUser">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加弹窗 end -->
 
   <!-- 编辑弹窗 start -->
   <div class="modal fade" id="editUserModal">
@@ -188,6 +258,21 @@
         }
       });
     });
+    //添加学生
+    $("#showAddUserModalButton").click(function () {
+        $('#showAddUserModal').modal('show');
+    });
+      $('#addUser').click(() => {
+          const params = $('#addForm').serializeArray();
+          console.log(params);
+          $.post('/admin/user/add', params, (res) => {
+              if (res.status === true) {
+                  location.reload();
+              } else {
+                  alert(res.msg);
+              }
+          });
+      });
     // 编辑学生
     $('.editUser').click(function() {
       const arr = $(this).attr('data-info').split(',');
