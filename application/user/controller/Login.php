@@ -33,9 +33,9 @@ class login extends Base{
         }
         $model = new User();
         if(Verify::isMobile($username)){
-            $owner = $model->where(array('mobile'=>$username))->find();
+            $owner = $model->where(array('mobile'=>$username,'isdel'=>0))->find();
         }else{
-            $owner = $model->where(array('user_no'=>$username))->find();
+            $owner = $model->where(array('user_no'=>$username,'isdel'=>0))->find();
         }
         if(empty($owner)){
             return $this->returnJson('用户名不存在',1000);

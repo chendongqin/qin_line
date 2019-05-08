@@ -30,7 +30,7 @@ class Login extends Base
             return $this->returnJson('验证码不正确',1000);
         }
         $model = new Teacher();
-        $teacher = $model->where('teacher_no|mobile',$userName)->find();
+        $teacher = $model->where(['teacher_no|mobile'=>$userName,'isdel'=>0])->find();
         if(empty($teacher)){
             return $this->returnJson('用户不存在');
         }

@@ -79,8 +79,8 @@ class Course extends Adminbase{
         if(!$course = Db::name('course')->where(array('id'=>$id))->find()){
             return $this->returnJson('用户不存在');
         }
-        if($course['people']>0)
-            return $this->returnJson('已有学生报名，无法删除');
+//        if($course['people']>0)
+//            return $this->returnJson('已有学生报名，无法删除');
         $res = Db::name('course')->delete(array('id'=>$id));
         if(!$res)
             return $this->returnJson('失败');
@@ -93,8 +93,9 @@ class Course extends Adminbase{
         if(!$course = Db::name('course')->where(array('id'=>$id))->find()){
             return $this->returnJson('用户不存在');
         }
-        if($course['people'] >0)
-            return $this->returnJson('开始报名的课程无法修改');
+//        if($course['people'] >0){
+//            return $this->returnJson('开始报名的课程无法修改');
+//        }
         $course['course_name'] = $this->getParam('courseName');
         $course['rooms'] = $this->getParam('roomsName');
         $course['begin_date'] = date('Y-m-d',strtotime($this->getParam('beginDate')));
