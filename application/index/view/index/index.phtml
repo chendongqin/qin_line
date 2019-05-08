@@ -2,16 +2,14 @@
 <div class="page-container page-width">
   {include file="../application/index/view/public/user-side.phtml" /}
   <div class="main-content">
-    {include file="../application/index/view/public/user-info.phtml" /}
-    <ol class="breadcrumb bc-3">
-      <li>
-        <a href="/index/index"><i class="entypo-home"></i>首页</a>
-      </li>
-      <li class="active">
-        <strong>商品列表</strong>
-      </li>
-    </ol>
-
+    <div class="row">
+      <div class="col-lg-2">
+        <a class="btn btn-green btn-sm" href="/admin/login">管理员登录</a>
+        <a class="btn btn-green btn-sm" href="/teacher/login">教师登录</a>
+        <a class="btn btn-green btn-sm" href="/user/login">学生登录</a>
+      </div>
+    </div>
+    <hr>
     <div class="flex center">
       <?php if(!empty($pager['data'])):?>
         <?php foreach ($pager['data'] as $key=>$data):?>

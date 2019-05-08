@@ -13,11 +13,22 @@
     </ol>
     <div class="dataTables_wrapper form-inline">
       <div class="row screen-sm">
-        <div class="col-lg-1">
+        <div class="col-lg-2">
           <span>教师ID: <?php echo $teacherId;?></span>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-3">
           <span>本月打卡总天数: <?php echo $monthWorkDays;?>天</span>
+        </div>
+      </div>
+      <div class="row screen-sm">
+        <div class="col-lg-12">
+          <form class="form-inline" method="get" action="">
+            <input type="hidden" value="<?php echo $teacherId ;?>" name="id">
+            <div class="form-group" style="margin-bottom: 0;">
+              <input type="text" class="form-control" name="month" autocomplete="off" style="width: 200px !important" placeholder="请输入月份，例：201901">
+            </div>
+            <button type="submit" class="btn btn-primary" id="search">搜索</button>
+          </form>
         </div>
       </div>
     </div>
