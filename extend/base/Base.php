@@ -106,7 +106,7 @@ class Base extends Controller{
             $second2 = $second1;
             $second1 = $tmp;
         }
-        return ($second1 - $second2) / 86400;
+        return (int)(($second1 - $second2) / 86400)+1;
     }
 
     public function workDays($month , $free2days = false , $free1days = false)

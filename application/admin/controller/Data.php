@@ -67,16 +67,16 @@ class Data extends Adminbase{
         $end = date('Ymd',strtotime('-1 day',strtotime('+1 month',strtotime($begin))));
         foreach ($data as $key =>$value){
             //正常打卡
-            $count = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=0')->count();
+            $count = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=0 and teacher_id='.$value['id'])->count();
             $data[$key]['workDays'] = $count;
             //完整加班天数
-            $isweek = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=1 and is_overdue=0')->count();
+            $isweek = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=1 and is_overdue=0 and teacher_id='.$value['id'])->count();
             $data[$key]['isWeekDays'] = $isweek;
             //迟到天数
-            $overdue = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=0 and is_overdue=1')->count();
+            $overdue = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=0 and is_overdue=1 and teacher_id='.$value['id'])->count();
             $data[$key]['overdueDays'] = $overdue;
             //迟到加班天数算0.5天的工资
-            $overdueOfIsWeek = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=1 and is_overdue=1')->count();
+            $overdueOfIsWeek = Db::name('work')->where('create_at >= '.$begin .' and create_at <='.$end .' and is_week=1 and is_overdue=1 and teacher_id='.$value['id'])->count();
             $data[$key]['overdueOfIsWeekDays'] = $overdueOfIsWeek;
             //加班补贴
             $data[$key]['addSalary'] = number_format(($isweek+0.5*$overdueOfIsWeek)/$allWorkDays*$value['salary']*1.5,2,'.','');

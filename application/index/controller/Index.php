@@ -50,4 +50,36 @@ use think\Db;
      }
 
 
+//     public function test(){
+//        $teachers = Db::name('teacher')->where(['isdel'=>0])->select();
+//        foreach ($teachers as $teacher){
+//            $begin = strtotime('2019-03-01');
+//            $end  = strtotime(date('Y-m-d'));
+//            while($begin <= $end){
+//                $rand = rand(1,5);
+//                $week = date('w',$begin);
+//                if($rand != 1 and ($week == 0 or $week == 6)){
+//                    goto addDate;
+//                }
+//                $where = array('teacher_id'=>$teacher['id'],'create_at'=>date('Ymd',$begin));
+//                if($work = Db::name('work')->where($where)->find()){
+//                    goto addDate;
+//                }
+//                $work = $where;
+//                $rand = rand(11,30);
+//                if($rand == 11){
+//                    $work['is_overdue'] = 1;
+//                }
+//                if($week ==0 || $week==6){
+//                    $work['is_week'] = 1;
+//                }
+//                Db::name('work')->insert($work);
+//                addDate:
+//                $begin = strtotime('+1 day',$begin);
+//            }
+//        }
+//
+//
+//     }
+
  }

@@ -11,7 +11,11 @@ class Login extends Base
 {
 
     public function index(){
-
+        $teacher = Session::get('teacher');
+        $teacher = isset($teacher[0])?$teacher[0]:$teacher;
+        if(!empty($teacher)){
+            return $this->redirect('/teacher/index');
+        }
         return $this->fetch();
     }
 
