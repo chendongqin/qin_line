@@ -22,16 +22,18 @@ class Data extends Adminbase{
         $data['totalMoney'] = Db::name('goods_order')->where('status in(1,2)')->sum('amount');
         $data['totalNum'] = Db::name('goods_order')->where('status in(1,2)')->sum('buy_num');
         //前三销售商品——如原生sql所述select goods_id,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` limit 0,3，统计商品销售量最多的取前三条
-        $data['goodsTop3'] = Db::query("select goods_id,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` limit 0,3");
+        $data['goodsTop3'] = Db::query("select goods_id,sum(`buy_num`)as allBuy from ql_goods_order group by `goods_id` order by allBuy limit 0,3");
         foreach ($data['goodsTop3'] as $key=>$datum){
             $goods = Db::name('goods')->where('id',$datum['goods_id'])->find();
             $data['goodsTop3'][$key]['goods']=$goods;
             unset($data['goodsTop3'][$key]['goods_id']);
         }
         //前五课程——去课程报名人数最多的前五条
-        $data['courseTop5'] = Db::name('course')->order('people')->limit(5)->select();
+        $data['courseTop5'] = Db::query("select course_name,teacher_id,sum(`people`)as people from ql_course group by `course_name`,`teacher_id` order by people limit 0,5");
+            Db::name('course')->order('people')->limit(5)->select();
         foreach ($data['courseTop5'] as $key=>$datum){
             $teacher = Db::name('teacher')->where('id',$datum['teacher_id'])->find();
+            $data['courseTop5'][$key]['course_name'] = $datum['course_name'].'('.$teacher['teacher_name'].')';
             unset($teacher['password']);
             $teacher['create_at']= date('Y-m-d H:i:s',strtotime($teacher['create_at']));
             $teacher['update_at']= date('Y-m-d H:i:s',strtotime($teacher['update_at']));
