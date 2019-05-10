@@ -12,10 +12,14 @@ use base\Adminbase;
 use think\Session;
 use think\Db;
 use ku\Verify;
+use ku\Tool;
 
 class Goods extends Adminbase
 {
     private $orderStatus = array('待支付', '已支付', '已收货', '申请退货', '退货成功', '退货失败');
+    protected $_musicPicture = [
+        'GIF', 'JPG', 'JPEG', 'PNG'
+    ];
 
     public function index()
     {
@@ -48,8 +52,27 @@ class Goods extends Adminbase
         $goods['stock'] = $this->getParam('stock', 0, 'int');
         $goods['is_down'] = $this->getParam('isDown', 0, 'int');
         $goods['price'] = $this->getParam('price');
-        if (!is_numeric($goods['price']))
+        if (!is_numeric($goods['price'])) {
             return $this->returnJson('价格格式错误');
+        }
+        //上传图片
+        $photo = $this->request->file('goods_photo');
+        if (empty($photo)) {
+            return $this->returnJson('音乐图片不能为空');
+        }
+        $dir = ROOT_PATH . 'public' . DS . 'uploads' . DS . 'goods';
+        Tool::makeDir($dir);
+        $info = $photo->move($dir);
+        $filename = $info->getFilename();
+        if (!$filename) {
+            return $this->returnJson($photo->getError());
+        }
+        $filenameArr = explode('.', $filename);
+        if (!in_array(strtoupper(end($filenameArr)), $this->_musicPicture)) {
+            @unlink(ROOT_PATH . 'public' . DS . 'uploads' . DS . 'music_picture' . DS . date('Ym') . DS . $filename);
+            return $this->returnJson('图片文件类型为：' . implode('，', $this->_musicPicture));
+        }
+        $goods['photo'] = DS . 'uploads' . DS . 'goods' . DS . $filename;
         $goods['describe'] = $this->getParam('describe');
         $res = Db::name('goods')->insert($goods);
         if (!$res)
@@ -87,9 +110,31 @@ class Goods extends Adminbase
         if (!is_numeric($goods['price']))
             return $this->returnJson('价格格式错误');
         $goods['describe'] = $this->getParam('describe');
+        //上传图片
+        $photo = $this->request->file('goods_photo');
+        $unlike = '';
+        if (!empty($photo)) {
+            $unlike = $goods['photo'];
+            $dir = ROOT_PATH . 'public' . DS . 'uploads' . DS . 'goods';
+            Tool::makeDir($dir);
+            $info = $photo->move($dir);
+            $filename = $info->getFilename();
+            if (!$filename) {
+                return $this->returnJson($photo->getError());
+            }
+            $filenameArr = explode('.', $filename);
+            if (!in_array(strtoupper(end($filenameArr)), $this->_musicPicture)) {
+                @unlink(ROOT_PATH . 'public' . DS . 'uploads' . DS . 'music_picture' . DS . date('Ym') . DS . $filename);
+                return $this->returnJson('图片文件类型为：' . implode('，', $this->_musicPicture));
+            }
+            $goods['photo'] = DS . 'uploads' . DS . 'goods' . DS . $filename;
+        }
         $res = Db::name('goods')->update($goods);
         if (!$res)
             return $this->returnJson('失败');
+        if ($unlike) {
+            unlink(PUBLIC_PATH . $unlike);
+        }
         return $this->returnJson('成功', 1001, true);
     }
 

@@ -29,6 +29,7 @@
             <th>上架情况</th>
             <th>库存量</th>
             <th>描述</th>
+            <th>图片</th>
             <td>操作</td>
           </tr>
         </thead>
@@ -41,6 +42,7 @@
                 <td><?php echo ($data['is_down'] == 0 ? '上架' : '下架');?></td>
                 <td><?php echo $data['stock'];?></td>
                 <td><?php echo $data['describe'];?></td>
+                <td><img src="<?php echo $data['photo']?$data['photo']:'';?>" width="60"></td>
                 <td>
                   <a class="btn btn-green btn-sm showStockModal" data-id="<?php echo $data['id'];?>">添加库存</a>
                   <a class="btn btn-green btn-sm editInfo" data-id="<?php echo $data['id'];?>">修改信息</a>
@@ -64,11 +66,11 @@
     <div class="modal-dialog custom-modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">&times;</button>
           <h4>添加商品信息</h4>
         </div>
         <div class="modal-body">
-          <form class="form-horizontal form-groups-bordered form-static" id="addForm">
+          <form class="form-horizontal form-groups-bordered form-static"  enctype="multipart/form-data"  id="addForm">
             <div class="form-group">
               <label class="control-label col-md-3" for="name">商品名称</label>
               <div class="col-md-6">
@@ -98,6 +100,12 @@
                 <input type="text" name="stock" class="form-control">
               </div>
             </div>
+              <div class="form-group">
+                  <label class="control-label col-md-3" for="goods_photo">图片</label>
+                  <div class="col-md-6">
+                      <input type="file" name="" id="addgoodsphoto">
+                  </div>
+              </div>
             <div class="form-group">
               <label class="control-label col-md-3" for="describe">描述</label>
               <div class="col-md-6">
@@ -119,8 +127,8 @@
     <div class="modal-dialog custom-modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4>添加商品信息</h4>
+          <button type="button" class="close" data-dismiss="modal" enctype="multipart/form-data"  aria-hidden="true">&times;</button>
+          <h4>修改商品信息</h4>
         </div>
         <div class="modal-body">
           <form class="form-horizontal form-groups-bordered form-static" id="editForm">
@@ -137,6 +145,12 @@
                 <input type="text" name="price" class="form-control">
               </div>
             </div>
+              <div class="form-group">
+                  <label class="control-label col-md-3" for="goods_photo">图片</label>
+                  <div class="col-md-6">
+                      <input type="file" name="" id="editgoodsphoto">
+                  </div>
+              </div>
             <div class="form-group">
               <label class="control-label col-md-3" for="describe">描述</label>
               <div class="col-md-6">
@@ -188,13 +202,30 @@
     });
     $('#addGoods').click(() => {
       const params = $('#addForm').serializeArray();
-      $.post('/admin/goods/add', params, (res) => {
-        if (res.status === true) {
-          location.reload();
-        } else {
-          alert(res.msg);
-        }
-      })
+      let formData = new FormData();
+      formData.append("goods_photo", $("#addgoodsphoto")[0].files[0]);
+      for (let i in params) {
+          formData.append(params[i].name, params[i].value)
+      }
+        $.ajax({
+            url: "/admin/goods/add",
+            type: "post",
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(res){
+                if (res.status === true) {
+                    location.reload();
+                } else {
+                    alert(res.msg);
+                }
+            },
+            error: function(err){
+                alert('网络错误');
+            }
+        })
     });
     // 获取商品详情
     $('.editInfo').click(function() {
@@ -210,15 +241,33 @@
       });
     });
     // 修改商品信息
-    $('#editGoods').click(function() {
+    $('#editGoods').click(()=> {
       const params = $('#editForm').serializeArray();
-      $.post('/admin/goods/update', params, (res) => {
-        if (res.status === true) {
-          location.reload();
-        } else {
-          alert(res.msg);
-        }
-      });
+      let formData = new FormData();
+      console.log($("#editgoodsphoto")[0].files[0]);
+      formData.append("goods_photo", $("#editgoodsphoto")[0].files[0]);
+      for (let i in params) {
+          formData.append(params[i].name, params[i].value)
+      }
+        $.ajax({
+            url: "/admin/goods/update",
+            type: "post",
+            data: formData,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(res){
+                if (res.status === true) {
+                    location.reload();
+                } else {
+                    alert(res.msg);
+                }
+            },
+            error: function(err){
+                alert('网络错误');
+            }
+        })
     });
     // 添加库存
     $('.showStockModal').click(function() {
